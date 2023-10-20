@@ -1,6 +1,6 @@
 # lips
 
-~~我忘记了lips的全称是啥了，如果你记得，帮我填一下罢~~
+Lightweight Information Portal Service
 
 - [Hello lips!](#hello-lips)
 - [我是索引2]()
