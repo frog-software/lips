@@ -1,47 +1,47 @@
-# lips
+# Svelte + Vite
 
-Lightweight Information Portal Service
+This template should help get you started developing with Svelte in Vite.
 
-- [Hello lips!](#hello-lips)
-- [目录结构](#项目结构)
-- [我是索引3]()
+## Recommended IDE Setup
 
-## Hello lips!
+[VS Code](https://code.visualstudio.com/) + [Svelte](https://marketplace.visualstudio.com/items?itemName=svelte.svelte-vscode).
 
-1. 安装[Node.js](https://nodejs.org/en)
-2. 配置node源（可选）
-3. lips 启动！！！
+## Need an official Svelte framework?
 
-```shell
-git clone https://github.com/frog-software/lips.git
-cd lips
-npm install
-npm run dev
+Check out [SvelteKit](https://github.com/sveltejs/kit#readme), which is also powered by Vite. Deploy anywhere with its serverless-first approach and adapt to various platforms, with out of the box support for TypeScript, SCSS, and Less, and easily-added support for mdsvex, GraphQL, PostCSS, Tailwind CSS, and more.
+
+## Technical considerations
+
+**Why use this over SvelteKit?**
+
+- It brings its own routing solution which might not be preferable for some users.
+- It is first and foremost a framework that just happens to use Vite under the hood, not a Vite app.
+
+This template contains as little as possible to get started with Vite + Svelte, while taking into account the developer experience with regards to HMR and intellisense. It demonstrates capabilities on par with the other `create-vite` templates and is a good starting point for beginners dipping their toes into a Vite + Svelte project.
+
+Should you later need the extended capabilities and extensibility provided by SvelteKit, the template has been structured similarly to SvelteKit so that it is easy to migrate.
+
+**Why `global.d.ts` instead of `compilerOptions.types` inside `jsconfig.json` or `tsconfig.json`?**
+
+Setting `compilerOptions.types` shuts out all other types not explicitly listed in the configuration. Using triple-slash references keeps the default TypeScript setting of accepting type information from the entire workspace, while also adding `svelte` and `vite/client` type information.
+
+**Why include `.vscode/extensions.json`?**
+
+Other templates indirectly recommend extensions via the README, but this file allows VS Code to prompt the user to install the recommended extension upon opening the project.
+
+**Why enable `checkJs` in the JS template?**
+
+It is likely that most cases of changing variable types in runtime are likely to be accidental, rather than deliberate. This provides advanced typechecking out of the box. Should you like to take advantage of the dynamically-typed nature of JavaScript, it is trivial to change the configuration.
+
+**Why is HMR not preserving my local component state?**
+
+HMR state preservation comes with a number of gotchas! It has been disabled by default in both `svelte-hmr` and `@sveltejs/vite-plugin-svelte` due to its often surprising behavior. You can read the details [here](https://github.com/sveltejs/svelte-hmr/tree/master/packages/svelte-hmr#preservation-of-local-state).
+
+If you have state that's important to retain within a component, consider creating an external store which would not be replaced by HMR.
+
+```js
+// store.js
+// An extremely simple external store
+import { writable } from 'svelte/store'
+export default writable(0)
 ```
-
-> 想要自己试试用vite构建一个svelte工程？试试这些命令
->
-> ```
-> npm create vite@latest
-> ✔ Project name: … helloworld
-> ✔ Select a framework: › Svelte
-> ✔ Select a variant: › JavaScript
-> 
-> cd helloworld
-> npm install
-> npm run dev
-> ```
-
-## 项目结构
-
-- `node_modules/` 这个是npm install的那堆包的目录，可以忽略
-- `public/` 这个是存放一些共有文件的地方
-- `src/` 你的源代码目录
-  - `actions/` 存放action的地方
-  - `assets/` 有点类似于根目录下的public，不过这里的assets只用于src文件夹下的代码
-  - `components/` 存放可复用组件的地方，如登录框，消息盒子啥的
-  - `routes/` 存放网页路由结构的地方
-  - `stores/` 顾名思义，给store用的文件夹
-  - `utils/` 存放各种有用的小东西，或者你不知道应该放在哪里的小脚本
-    - `api/` 将网络请求封装成一个个函数
-    - `types/` 存放数据结构

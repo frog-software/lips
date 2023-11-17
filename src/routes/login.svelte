@@ -1,0 +1,48 @@
+<h1>Login</h1>
+<script>
+  import {push,location} from 'svelte-spa-router'
+  import {onDestroy} from 'svelte';
+  import PocketBase from 'pocketbase'
+
+  const pb = new PocketBase('http://127.0.0.1:8090');
+  let username='';
+  let password='';
+
+  async function handleLogin(){
+    try{
+        const userData = await pb.collection('users').authWithPassword(username, password);
+            if (userData) {
+                push('/main-page'); // 登录成功后跳转
+            }
+    }catch(error){
+        alert("用戶名或密碼錯誤");
+    }
+  }
+  function handleRegister(){
+    push('/register-page');
+  }
+  let currentpath='';
+
+  const unsubscribe=location.subscribe($location=>{
+    currentpath=$location;
+  })
+  onDestroy(unsubscribe);
+</script>
+
+{#if currentpath=='/login-page' }
+<form on:submit|preventDefault={handleLogin}>
+    <div class="content-box">
+        <div class="item-box">
+            <input type="email" bind:value={username} placeholder="Email">
+        </div>
+        <div class="item-box">
+            <input type="password" bind:value={password} placeholder="Password">
+        </div>
+      </div>
+    <button type="submit">登录</button>
+</form>
+<button on:click={handleRegister}>
+  注册
+</button>
+{/if}
+
