@@ -46,7 +46,7 @@
             </li>
         </ul>
         <div class="search-container">
-            <span on:click={Click}> 🔍 </span>
+            <button on:click={Click}> 🔍 </button>
             <div style:display={showPop ? "block" : "none"}>
                 <input
                     type="text"
