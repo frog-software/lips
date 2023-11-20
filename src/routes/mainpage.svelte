@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 <script>
     import { push, location } from "svelte-spa-router";
     import { onDestroy } from "svelte";
@@ -66,8 +65,3 @@
         align-items: center;
     }
 </style>
-=======
-<h1>
-    This is mainpage
-</h1>
->>>>>>> origin/frame
