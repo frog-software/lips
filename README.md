@@ -1,3 +1,5 @@
+
+
 # lips
 
 Lightweight Information Portal Service
@@ -45,3 +47,10 @@ npm run dev
   - `utils/` 存放各种有用的小东西，或者你不知道应该放在哪里的小脚本
     - `api/` 将网络请求封装成一个个函数
     - `types/` 存放数据结构
+
+## 安装依赖
+
+```
+npm install
+```
+
