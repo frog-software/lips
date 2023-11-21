@@ -16,7 +16,7 @@
         };
         try {
             await pb.collection("users").create(data);
-            push("/login-page");
+            push("/login");
         } catch (error) {
             alert("fail to register");
         }
