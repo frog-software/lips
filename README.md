@@ -1,9 +1,11 @@
+
+
 # lips
 
 Lightweight Information Portal Service
 
 - [Hello lips!](#hello-lips)
-- [我是索引2]()
+- [目录结构](#项目结构)
 - [我是索引3]()
 
 ## Hello lips!
@@ -31,3 +33,24 @@ npm run dev
 > npm install
 > npm run dev
 > ```
+
+## 项目结构
+
+- `node_modules/` 这个是npm install的那堆包的目录，可以忽略
+- `public/` 这个是存放一些共有文件的地方
+- `src/` 你的源代码目录
+  - `actions/` 存放action的地方
+  - `assets/` 有点类似于根目录下的public，不过这里的assets只用于src文件夹下的代码
+  - `components/` 存放可复用组件的地方，如登录框，消息盒子啥的
+  - `routes/` 存放网页路由结构的地方
+  - `stores/` 顾名思义，给store用的文件夹
+  - `utils/` 存放各种有用的小东西，或者你不知道应该放在哪里的小脚本
+    - `api/` 将网络请求封装成一个个函数
+    - `types/` 存放数据结构
+
+## 安装依赖
+
+```
+npm install
+```
+
