@@ -5,6 +5,7 @@ import Register from './routes/register.svelte'
 import CreateChannel from './routes/createChannel.svelte'
 import CheckInformation from './routes/checkInformation.svelte'
 import YourChannel from './routes/yourChannel.svelte'
+import Postnotice from './routes/postnotice.svelte'
 export default {
   '/': DoorPage,
   '/login': Login,
@@ -13,5 +14,5 @@ export default {
   '/createChannel': CreateChannel,
   '/checkInformation': CheckInformation,
   '/yourChannel': YourChannel,
-
+  '/postnotice': Postnotice,
 }

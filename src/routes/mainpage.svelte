@@ -40,6 +40,11 @@
                 </button>
             </li>
             <li>
+                <button on:click={() => JumpNewPage("postnotice")}>
+                    发布通知
+                </button>
+            </li>
+            <li>
                 <button on:click={() => JumpNewPage("login")}>
                     登出
                 </button>
