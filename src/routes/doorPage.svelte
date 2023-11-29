@@ -1,7 +1,3 @@
-<style>
-  @import '../styles/doorpage.css';
-</style>
-
 <script>
   import { push, location } from "svelte-spa-router";
   import { onDestroy } from "svelte";
@@ -19,7 +15,7 @@
 
 <!-- 添加视频作为背景 -->
 <video autoplay loop muted>
-  <source src="testBackground.mp4" type="video/mp4">
+  <source src="testBackground.mp4" type="video/mp4" />
   Your browser does not support the video tag.
 </video>
 
@@ -32,3 +28,7 @@
     <button on:click={handleLogin}> Log in </button>
   {/if}
 </div>
+
+<style>
+  @import "../styles/doorpage.css";
+</style>
