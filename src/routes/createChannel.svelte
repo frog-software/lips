@@ -1,3 +1,1 @@
-<h1>
-    Create your channel
-</h1>
+<h1>Create your channel</h1>
