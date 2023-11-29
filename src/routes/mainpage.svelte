@@ -21,7 +21,7 @@
 <h4>LIPS - Lightweight Information Portal Service</h4>
 
 <body>
-    {#if (currentpath = "/main")}
+    {#if (currentpath == "/main")}
         <ul>
             用户
             <li>

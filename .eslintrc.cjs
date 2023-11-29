@@ -1,4 +1,3 @@
-
 module.exports = {
     env: {
       browser: true,   // 表明代码运行在浏览器环境
@@ -16,10 +15,6 @@ module.exports = {
     plugins: [
       'svelte' // 使用 eslint-plugin-svelte 插件
     ],
-    rules: {
-      // 在这里自定义规则
-      'no-unused-vars': 'warn', // 未使用变量发出警告
-    },
     overrides: [
       {
         files: ['*.svelte'],
