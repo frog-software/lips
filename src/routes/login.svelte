@@ -2,7 +2,7 @@
   import { push, location } from "svelte-spa-router";
   import { onDestroy } from "svelte";
   import PocketBase from "pocketbase";
-  import {PocketBase_URL} from "../utils/api/index"
+  import { PocketBase_URL } from "../utils/api/index";
 
   const pb = new PocketBase(PocketBase_URL);
   let username = "";

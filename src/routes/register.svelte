@@ -1,11 +1,11 @@
 <script>
-    import PocketBase from "pocketbase";
-    import { push } from "svelte-spa-router";
-    import {PocketBase_URL} from "../utils/api/index"
-    let username = "";
-    let password = "";
-    let passwordconfirm = "";
-    const pb = new PocketBase(PocketBase_URL);
+  import PocketBase from "pocketbase";
+  import { push } from "svelte-spa-router";
+  import { PocketBase_URL } from "../utils/api/index";
+  let username = "";
+  let password = "";
+  let passwordconfirm = "";
+  const pb = new PocketBase(PocketBase_URL);
 
   async function creatCount() {
     const data = {

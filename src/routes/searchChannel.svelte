@@ -1,3 +1,1 @@
-<h1>
-    search channels
-</h1>
+<h1>search channels</h1>
