@@ -15,6 +15,11 @@ module.exports = {
   plugins: [
     "svelte", // 使用 eslint-plugin-svelte 插件
   ],
+  "rules": {
+    "no-unused-vars": "warn",//未使用的变量只警告
+    "eqeqeq": "off",//不强制使用"==="和"!=="
+    "no-console": ["warn", { "allow": ["warn", "error"] }]//某些情况下允许使用console.log
+  },
   overrides: [
     {
       files: ["*.svelte"],
