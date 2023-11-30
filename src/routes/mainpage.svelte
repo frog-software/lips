@@ -5,18 +5,23 @@
 
     let showPop = false;
     let input = "";
-    function Click() {
-        showPop = !showPop;
+    let src = "userPicture.jpeg";
+    let showUserInformation = false;
+    function Click(state) {
+        showPop = !state;
+    }
+    function ClickUser(state) {
+        showUserInformation = !state;
     }
 
-  function JumpNewPage(address) {
-    push("/" + address);
-  }
-  let currentpath = "";
-  const unsubscribe = location.subscribe(($location) => {
-    currentpath = $location;
-  });
-  onDestroy(unsubscribe);
+    function JumpNewPage(address) {
+        push("/" + address);
+    }
+    let currentpath = "";
+    const unsubscribe = location.subscribe(($location) => {
+        currentpath = $location;
+    });
+    onDestroy(unsubscribe);
 </script>
 
 <h4>LIPS - Lightweight Information Portal Service</h4>
@@ -24,39 +29,25 @@
 <body>
     {#if (currentpath = "/main")}
         <ul>
-            用户
-            <li>
-                <button on:click={() => JumpNewPage("createChannel")}>
-                    创建频道
-                </button>
-            </li>
-            <li>
-                <button on:click={() => JumpNewPage("checkInformation")}>
-                    查看通知
-                </button>
-            </li>
-            <li>
-                <button on:click={() => JumpNewPage("yourChannel")}>
-                    你加入的频道
-                </button>
-            </li>
-            <li>
-                <button on:click={() => JumpNewPage("login")}>
-                    登出
-                </button>
-            </li>
-        </ul>
-        <div class="search-container">
-            <button on:click={Click}> 🔍 </button>
-            <div style:display={showPop ? "block" : "none"}>
-                <input
-                    type="text"
-                    bind:value={input}
-                    placeholder="查找频道id"
-                />
-                <button>search</button>
+            <button
+                class="circle"
+                on:click={() => ClickUser(showUserInformation)}
+            >
+                <img {src} alt="user" class="button-img" />
+            </button>
+            <div style:display={showUserInformation ? "block" : "none"}>
+                <li>
+                    <button on:click={() => JumpNewPage("checkInformation")}>
+                        Todolist
+                    </button>
+                </li>
+                <li>
+                    <button on:click={() => JumpNewPage("login")}>
+                        登出
+                    </button>
+                </li>
             </div>
-        </div>
+        </ul>
     {/if}
 </body>
 <div class="button-manage" >
@@ -88,8 +79,27 @@
 </div>
 
 <style>
-    .search-container {
+    .circle {
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+        overflow: hidden;
+        border: none;
+        padding: 0;
         display: flex;
+        justify-content: center;
         align-items: center;
+    }
+
+    .button-img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+    .button-manage{
+        display: grid;
+        grid-template-columns: 1fr; 
+        width: 30px;
+        height: 150px;
     }
 </style>

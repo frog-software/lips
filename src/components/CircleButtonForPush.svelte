@@ -47,7 +47,7 @@
     .info-board {
         visibility: hidden;
         position: absolute; 
-        left: 100%; 
+        left: 65%; 
         top: 50%;
         transform: translateY(-50%); /*让文本框显示在按钮右侧中间位置*/
         background-color: black;
