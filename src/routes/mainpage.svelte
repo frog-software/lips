@@ -3,13 +3,8 @@
   import { onDestroy } from "svelte";
   import CircleButtonForPush from "../components/CircleButtonForPush.svelte";
 
-  let showPop = false;
-  let input = "";
   let src = "userPicture.jpeg";
   let showUserInformation = false;
-  function Click(state) {
-    showPop = !state;
-  }
   function ClickUser(state) {
     showUserInformation = !state;
   }
