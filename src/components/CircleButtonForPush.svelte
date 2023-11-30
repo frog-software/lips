@@ -1,6 +1,5 @@
 <script>
   import { push } from "svelte-spa-router";
-  import DoorPage from "../routes/doorPage.svelte";
   export let address;
   export let src;
   export let info;
