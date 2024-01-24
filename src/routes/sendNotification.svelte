@@ -7,6 +7,7 @@
   let tittle = "";
   let body = "";
   let release_time = "";
+  let tag = "";
   const pb = new PocketBase(PocketBase_URL);
 
   function cancel() {
@@ -19,6 +20,7 @@
       tittle: tittle,
       body: body,
       release_time: release_time,
+      tag: tag,
     };
     try {
       await pb.collection("notices").create(data);
@@ -54,6 +56,15 @@
       id="release_time"
       bind:value={release_time}
       placeholder="Release Time"
+    />
+  </div>
+  <div>
+    <label for="tag">Tag:</label>
+    <input
+      type="text"
+      id="tag"
+      bind:value={tag}
+      placeholder="An interesting tag"
     />
   </div>
   <div>
