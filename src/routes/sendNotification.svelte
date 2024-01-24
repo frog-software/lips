@@ -1,7 +1,6 @@
 <script>
   import PocketBase from "pocketbase";
-  import { push, location } from "svelte-spa-router";
-  import { onDestroy } from "svelte";
+  import { push } from "svelte-spa-router";
   import { PocketBase_URL } from "../utils/api/index";
 
   let tittle = "";
