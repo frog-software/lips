@@ -30,11 +30,6 @@
     }
   }
 
-  let currentpath;
-  const unsubscribe = location.subscribe(($location) => {
-    currentpath = $location;
-  });
-  onDestroy(unsubscribe);
 </script>
 
 <h1>发布你的第一条通知吧！</h1>
