@@ -30,7 +30,7 @@
     }
   }
 
-  let currentpath = "";
+  let currentpath;
   const unsubscribe = location.subscribe(($location) => {
     currentpath = $location;
   });
