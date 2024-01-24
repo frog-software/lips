@@ -28,7 +28,6 @@
       alert("fail to post");
     }
   }
-
 </script>
 
 <h1>发布你的第一条通知吧！</h1>
