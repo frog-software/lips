@@ -1,9 +1,9 @@
 <script>
   import PocketBase from "pocketbase";
   import { push } from "svelte-spa-router";
-
+  import { PocketBase_URL } from "../utils/api/index";
   // 实例化 PocketBase
-  const pb = new PocketBase("http://127.0.0.1:8090");
+  const pb = new PocketBase(PocketBase_URL);
 
   let name = ""; // 绑定到输入框的变量，用于存储用户输入的频道名称
   let searchResults = []; // 存储搜索结果的数组
