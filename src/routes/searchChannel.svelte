@@ -56,8 +56,7 @@
     {#each searchResults as channel}
       <li>
         <strong>{channel.channelName}</strong>
-        <button on:click={() => ToChannel(channel.channelName)}>访问频道</button
-        >
+        <button on:click={() => ToChannel(channel.channelName)}>访问频道</button>
       </li>
     {/each}
   </ul>
