@@ -29,7 +29,7 @@
     };
 
     try {
-      const createdChannel = await pb.collection("channels").create(data);
+      await pb.collection("channels").create(data);
       alert("Channel created successfully");
       isLoading = false;
       push("/main");
