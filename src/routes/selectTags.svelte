@@ -2,7 +2,6 @@
   import { onMount } from "svelte";
   import { PocketBase_URL } from "../utils/api/index";
   import PocketBase from "pocketbase";
-  import { push } from "svelte-spa-router";
 
   const pb = new PocketBase(PocketBase_URL);
   let records = [];
