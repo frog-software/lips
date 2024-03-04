@@ -3,6 +3,7 @@
   import { onDestroy } from "svelte";
   import PocketBase from "pocketbase";
   import { PocketBase_URL } from "../utils/api/index";
+  import { currentUserEmail } from "../store.js";
 
   const pb = new PocketBase(PocketBase_URL);
   let username = "";
@@ -14,6 +15,9 @@
         .collection("users")
         .authWithPassword(username, password);
       if (userData) {
+        currentUserEmail.set(username);
+        const userEmail = $currentUserEmail;
+        console.log("当前用户的电子邮件:", userEmail);
         push("/main");
       }
     } catch (error) {
