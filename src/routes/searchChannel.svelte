@@ -4,7 +4,6 @@
   import { PocketBase_URL } from "../utils/api/index";
   import { currentUserEmail } from "../store.js";
 
-  // 实例化 PocketBase
   const pb = new PocketBase(PocketBase_URL);
 
   let channelNameInput = ""; // 用于存储用户输入的频道名称
