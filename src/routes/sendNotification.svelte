@@ -5,8 +5,10 @@
 
   let tittle = "";
   let body = "";
-  let release_time = "";
   let tag = "";
+  let currentYear = new Date().getFullYear();
+  let currentMonth = new Date().getMonth() + 1; //从0开始
+  let currentDate = new Date().getDate();
   const pb = new PocketBase(PocketBase_URL);
 
   function cancel() {
@@ -18,8 +20,10 @@
     const data = {
       tittle: tittle,
       body: body,
-      release_time: release_time,
       tag: tag,
+      year: currentYear,
+      month: currentMonth,
+      day: currentDate,
     };
     try {
       await pb.collection("notices").create(data);
@@ -27,6 +31,16 @@
     } catch (error) {
       alert("fail to post");
     }
+  }
+
+  const years = Array.from({ length: currentYear - 1999 }, (_, i) => 2000 + i);
+  const months = Array.from({ length: 12 }, (_, i) => i + 1);
+  let days;
+
+  $: days = getDaysInMonth(currentYear, currentMonth);
+
+  function getDaysInMonth(year, month) {
+    return new Date(year, month, 0).getDate();
   }
 </script>
 
@@ -43,15 +57,6 @@
     ></textarea>
   </div>
   <div>
-    <label for="release_time">Release Time:</label>
-    <input
-      type="text"
-      id="release_time"
-      bind:value={release_time}
-      placeholder="Release Time"
-    />
-  </div>
-  <div>
     <label for="tag">Tag:</label>
     <input
       type="text"
@@ -59,6 +64,24 @@
       bind:value={tag}
       placeholder="An interesting tag"
     />
+  </div>
+  <div>
+    <label for="release_time">Release_time:</label>
+    <select bind:value={currentYear}>
+      {#each years as year}
+        <option value={year}>{year}年</option>
+      {/each}
+    </select>
+    <select bind:value={currentMonth}>
+      {#each months as month}
+        <option value={month}>{month}月</option>
+      {/each}
+    </select>
+    <select bind:value={currentDate}>
+      {#each Array.from({ length: days }, (_, i) => i + 1) as day}
+        <option value={day}>{day}日</option>
+      {/each}
+    </select>
   </div>
   <div>
     <button type="submit" class="cancel-button"> 发布 </button>

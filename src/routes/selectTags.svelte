@@ -7,13 +7,13 @@
   let records = [];
   let selectrecord = [];
   let setag = "";
-
+  let checktittle = [];
   async function xianshi() {
     try {
-      const response = await pb.collection("notices").getFullList({
+      const response = await pb.collection("notices").getList(1, 3, {
         sort: "-created",
       });
-      records = response;
+      records = response.items;
     } catch (error) {
       alert("fail to find");
     }
@@ -37,16 +37,49 @@
       alert("fail to select");
     }
   }
+
+  async function check(checktag) {
+    records = [];
+    selectrecord = [];
+    try {
+      const result1 = await pb.collection("notices").getFullList({
+        filter: `tittle="${checktag}"`,
+      });
+      if (result1.length === 0) {
+        alert("fail to select");
+        checktittle = [];
+      } else {
+        checktittle = result1;
+      }
+    } catch (error) {
+      alert("fail to check");
+    }
+  }
+
+  function update() {
+    checktittle = [];
+  }
+
+  async function copy(check) {
+    try {
+      const newRecord = {
+        tittle: check.tittle,
+        body: check.body,
+        tag: check.tag,
+        year: check.year,
+        month: check.month,
+        day: check.day,
+      };
+      await pb.collection("todolist").create(newRecord);
+      alert("添加成功！");
+      location.reload();
+    } catch (error) {
+      alert("添加失败。");
+    }
+  }
 </script>
 
 <h1>select tags</h1>
-
-<h2>tags recommended:</h2>
-{#each records as record}
-  <div class="container">
-    <p>#{record.tag}</p>
-  </div>
-{/each}
 
 <form on:submit|preventDefault={select}>
   <div>
@@ -57,16 +90,33 @@
       bind:value={setag}
       placeholder="An interesting tag"
     />
-  </div>
-  <div>
-    <button type="submit">search</button>
+    <button type="submit" on:click={update}>search</button>
   </div>
 </form>
+
+{#each records as record}
+  <div class="container">
+    <p>#{record.tag}</p>
+  </div>
+{/each}
+
 {#each selectrecord as record}
-  <div>
-    <p>tittle: {record.tittle}</p>
-    <p>body: {record.body}</p>
-    <p>release_time: {record.release_time}</p>
+  <ul class="results-list">
+    <li>
+      <p>
+        #{record.tag} 《{record.tittle}》 {record.year}年{record.month}月{record.day}日
+      </p>
+      <button on:click={() => check(record.tittle)}>check</button>
+    </li>
+  </ul>
+{/each}
+
+{#each checktittle as check}
+  <div class="check">
+    <p>{check.tittle}</p>
+    <p>{check.body}</p>
+    <p>{check.year}年{check.month}月{check.day}日</p>
+    <button on:click={() => copy(check)}>+ todolist</button>
   </div>
 {/each}
 
@@ -74,5 +124,27 @@
   .container {
     display: inline-block;
     padding: 10px; /* 内边距 */
+  }
+
+  button {
+    background-color: #007bff;
+    color: white;
+  }
+
+  .results-list {
+    list-style: none;
+    padding-left: 0;
+  }
+
+  .results-list li {
+    margin-top: 10px;
+    padding: 10px;
+    background-color: #f8f9fa;
+    border-radius: 4px;
+  }
+
+  .check {
+    background-color: #f8f9fa;
+    border-radius: 4px;
   }
 </style>
