@@ -5,9 +5,20 @@
 </script>
 
 {#if isOpen}
-  <div class="modal-overlay" on:click={close}>
-    <div class="modal-content" on:click|stopPropagation>
-      <button class="close-button" on:click={close}>×</button>
+  <div
+    class="modal-overlay"
+    role="button"
+    tabindex="0"
+    on:click={close}
+    on:keypress
+  >
+    <div
+      class="modal-content"
+      on:keypress
+      on:click|stopPropagation
+      role="button"
+      tabindex="0"
+    >
       <slot />
       <!-- 用于插入模态对话框的内容 -->
     </div>
@@ -32,15 +43,5 @@
     padding: 20px;
     border-radius: 8px;
     position: relative;
-  }
-
-  .close-button {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    border: none;
-    background: none;
-    cursor: pointer;
-    font-size: 20px;
   }
 </style>
