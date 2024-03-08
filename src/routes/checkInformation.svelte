@@ -4,13 +4,16 @@
   import { PocketBase_URL } from "../utils/api/index";
   import Modal from "./Modal.svelte";
   import { onMount } from "svelte";
+  import { currentUserEmail } from "../store.js";
   const pb = new PocketBase(PocketBase_URL);
   let records = [];
   let showModal = false;
   async function checkchan() {
     try {
-      const response = await pb.collection("channels").getFullList({
+      const userEmail = $currentUserEmail;
+      const response = await pb.collection("users_channels").getFullList({
         sort: "-created",
+        filter: `useremail="${userEmail}"`,
       });
       records = response;
     } catch (error) {
@@ -33,10 +36,10 @@
     
 </Modal> -->
 <Modal isOpen={showModal} close={toggleModal}>
-  <h2>频道</h2>
+  <h2 style="color: black;">频道</h2>
   <div class="container">
     {#each records as record}
-      <button class="button">#{record.channelName}</button>
+      <button class="button">#{record.channelname}</button>
       <!-- <p>#{record.channelName}</p> -->
     {/each}
   </div>
@@ -55,7 +58,7 @@
     width: 60%;
     margin-top: 10px;
     padding: 10px;
-    background-color: #f8f9fa;
+    background-color: black;
     border-radius: 4px;
   }
 </style>
