@@ -80,7 +80,7 @@
         channelname: channelname,
       });
       alert("已成功加入频道");
-      navigateToChannelDetail(channelname);
+      navigateToChannelDetail("main");
     } catch (error) {
       console.error("加入频道时发生错误：", error);
       alert("加入频道时发生错误：" + error.message);
@@ -89,7 +89,7 @@
 
   // 导航到指定频道详情页的函数
   function navigateToChannelDetail(channelName) {
-    push(`/channelDetail/${channelName}`);
+    push("/" + channelName);
   }
 
   // 应用防抖函数到搜索频道函数，以优化性能

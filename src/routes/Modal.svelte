@@ -39,7 +39,7 @@
   }
 
   .modal-content {
-    background: white;
+    background: rgb(199, 195, 195);
     padding: 20px;
     border-radius: 8px;
     position: relative;
