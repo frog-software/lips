@@ -112,6 +112,7 @@
     margin-bottom: 20px; /* 为每个按钮下方添加10px的间隔 */
     text-align: center;
   }
+
   .button-present:hover {
     color: #ffffff; /* 选择一个与悬停背景色对比度高的颜色 */
     opacity: 1; /* 确保按钮和文本在悬停时不会变得透明 */
