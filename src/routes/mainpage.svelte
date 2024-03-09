@@ -82,6 +82,7 @@
     <img {src} alt="user" class="button-img" />
     <p class="username">{username}</p>
     <button on:click={() => JumpNewPage("login")}> 登出 </button>
+    <p>TEST</p>
   </div>
   <div class="right-side">
     <!-- 右边内容 -->
