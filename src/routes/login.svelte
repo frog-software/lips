@@ -38,7 +38,7 @@
       previousBodyStyle = {
         backgroundImage: document.body.style.backgroundImage,
         backgroundSize: document.body.style.backgroundSize,
-        backgroundPosition: document.body.style.backgroundPosition
+        backgroundPosition: document.body.style.backgroundPosition,
       };
     }
     currentpath = $location;
