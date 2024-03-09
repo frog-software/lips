@@ -52,6 +52,11 @@
     src="createChannelPicture.jpg"
   />
   <CircleButtonForPush
+    address="/mychannel"
+    info="我的频道"
+    src="createChannelPicture.jpg"
+  />
+  <CircleButtonForPush
     address="/selectTags"
     info="筛选标签"
     src="selectTagsPicture.jpg"

@@ -2,6 +2,7 @@
   import { onMount } from "svelte";
   import { PocketBase_URL } from "../utils/api/index";
   import PocketBase from "pocketbase";
+  import { currentUserEmail } from "../store.js";
 
   const pb = new PocketBase(PocketBase_URL);
   let records = [];
@@ -62,6 +63,7 @@
 
   async function copy(check) {
     try {
+      const userEmail = $currentUserEmail;
       const newRecord = {
         tittle: check.tittle,
         body: check.body,
@@ -69,6 +71,7 @@
         year: check.year,
         month: check.month,
         day: check.day,
+        useremail: userEmail,
       };
       await pb.collection("todolist").create(newRecord);
       alert("添加成功！");

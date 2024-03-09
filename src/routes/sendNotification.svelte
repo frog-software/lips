@@ -2,6 +2,7 @@
   import PocketBase from "pocketbase";
   import { push } from "svelte-spa-router";
   import { PocketBase_URL } from "../utils/api/index";
+  import { currentUserEmail, currentchannelid } from "../store.js";
 
   let tittle = "";
   let body = "";
@@ -17,6 +18,8 @@
 
   async function post() {
     //异步函数的定义
+    const userEmail = $currentUserEmail;
+    const channelid = $currentchannelid;
     const data = {
       tittle: tittle,
       body: body,
@@ -24,6 +27,8 @@
       year: currentYear,
       month: currentMonth,
       day: currentDate,
+      useremail: userEmail,
+      channelid: channelid,
     };
     try {
       await pb.collection("notices").create(data);
