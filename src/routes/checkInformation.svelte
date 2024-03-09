@@ -1,10 +1,11 @@
-<!-- 查看当前用户创建的todolist -->
+<!-- 查看当前用户创建的todolist 点击查看对应通知-->
 <script>
   import PocketBase from "pocketbase";
   import { PocketBase_URL } from "../utils/api/index";
+  import { push } from "svelte-spa-router";
   import Modal from "./Modal.svelte";
   import { onMount } from "svelte";
-  import { currentUserEmail } from "../store.js";
+  import { currentUserEmail, currentnoticeid } from "../store.js";
 
   const pb = new PocketBase(PocketBase_URL);
   let records = [];
@@ -21,6 +22,10 @@
       alert("fail to find");
     }
   }
+  function jumpnew(id) {
+    currentnoticeid.set(id);
+    push("/checknotice");
+  }
   function toggleModal() {
     showModal = !showModal;
   }
@@ -35,7 +40,9 @@
   <h2 style="color: black;">todolist</h2>
   <div class="container">
     {#each records as record}
-      <button class="button">#{record.tittle}</button>
+      <button class="button" on:click={() => jumpnew(record.noticeid)}
+        >#{record.tittle}</button
+      >
     {/each}
   </div>
 </Modal>
@@ -55,5 +62,10 @@
     padding: 10px;
     background-color: black;
     border-radius: 4px;
+  }
+  .button:hover {
+    color: #ffffff;
+    opacity: 1;
+    background-color: #6a6d6e;
   }
 </style>

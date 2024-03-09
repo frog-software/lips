@@ -5,8 +5,7 @@
   import { push } from "svelte-spa-router";
   import Modal from "./Modal.svelte";
   import { onMount } from "svelte";
-  import { currentUserEmail } from "../store.js";
-  import { currentchannelid } from "../store.js";
+  import { currentUserEmail, currentchannelid } from "../store.js";
 
   const pb = new PocketBase(PocketBase_URL);
   let records = [];
@@ -64,5 +63,10 @@
     padding: 10px;
     background-color: black;
     border-radius: 4px;
+  }
+  .button:hover {
+    color: #ffffff;
+    opacity: 1;
+    background-color: #6a6d6e;
   }
 </style>
