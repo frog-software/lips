@@ -7,16 +7,17 @@
   import { currentUserEmail } from "../store.js";
 
   const pb = new PocketBase(PocketBase_URL);
-  let username = "";
+  let usereamil = "";
   let password = "";
+  let username = "";
 
   async function handleLogin() {
     try {
       const userData = await pb
         .collection("users")
-        .authWithPassword(username, password);
+        .authWithPassword(usereamil, password);
       if (userData) {
-        currentUserEmail.set(username);
+        currentUserEmail.set(usereamil);
         const userEmail = $currentUserEmail;
         console.log("当前用户的电子邮件:", userEmail);
         push("/main");
