@@ -23,7 +23,7 @@
       alert("fail to find");
     }
   }
-  async function checkUser(){
+  async function checkUser() {
     try {
       const userEmail = $currentUserEmail;
       const response_ = await pb.collection("users").getFullList({
@@ -95,9 +95,24 @@
         {/each}
       </div>
     </Modal>
-    <button class="button-present"on:click={() => JumpNewPage("searchChannel")}> 搜索频道 </button>
-    <button class="button-present"on:click={() => JumpNewPage("createChannel")}> 创建频道 </button>
-    <button class="button-present"on:click={() => JumpNewPage("checkInformation")}> 待办事项 </button>
+    <button
+      class="button-present"
+      on:click={() => JumpNewPage("searchChannel")}
+    >
+      搜索频道
+    </button>
+    <button
+      class="button-present"
+      on:click={() => JumpNewPage("createChannel")}
+    >
+      创建频道
+    </button>
+    <button
+      class="button-present"
+      on:click={() => JumpNewPage("checkInformation")}
+    >
+      待办事项
+    </button>
     <!-- <div class="button-manage">
       <CircleButtonForPush
         address="/searchChannel"
@@ -126,7 +141,8 @@
       />
     </div>
   </div> -->
-</body>
+  </div></body
+>
 
 <!-- <body>
   {#if currentpath == "/main"}
@@ -201,7 +217,7 @@
     display: flex;
   }
 
-  .username{
+  .username {
     font-size: 27px; /* 或任何您喜欢的大小 */
   }
 
@@ -232,15 +248,13 @@
     margin-right: 20px; /* 为每个按钮添加右边距 */
     margin-bottom: 20px; /* 为每个按钮下方添加10px的间隔 */
     text-align: center;
-    
   }
   .button-present:hover {
-    color: #FFFFFF; /* 选择一个与悬停背景色对比度高的颜色 */
+    color: #ffffff; /* 选择一个与悬停背景色对比度高的颜色 */
     opacity: 1; /* 确保按钮和文本在悬停时不会变得透明 */
     /* 确保没有将文本设置为不可见 */
     background-color: #6a6d6e; /* 悬停时的背景颜色 */
-    
-}
+  }
   .circle {
     width: 30px;
     height: 30px;

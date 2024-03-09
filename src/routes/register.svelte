@@ -68,7 +68,8 @@
 <h1>Register</h1>
 <form on:submit|preventDefault={creatCount}>
   <input type="email" bind:value={email} placeholder="Email" />
-  <input type="text" bind:value={username} placeholder="Username" /> <!-- 新添加的用户名输入 -->
+  <input type="text" bind:value={username} placeholder="Username" />
+  <!-- 新添加的用户名输入 -->
   <input type="password" bind:value={password} placeholder="Password" />
   <input
     type="password"
