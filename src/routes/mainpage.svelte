@@ -116,6 +116,7 @@
     margin-bottom: 20px; /* 为每个按钮下方添加10px的间隔 */
     text-align: center;
   }
+
   .button-present:hover {
     color: #ffffff; /* 选择一个与悬停背景色对比度高的颜色 */
     opacity: 1; /* 确保按钮和文本在悬停时不会变得透明 */
@@ -127,5 +128,21 @@
     height: 360px; /* 设置图像的高度为与宽度相同的值，以确保图像是正方形的 */
     border-radius: 50%; /* 这将使图像的边角变圆，形成圆形 */
     object-fit: cover; /* 确保图像在调整大小时保持其宽高比 */
+  }
+
+  .container {
+    max-width: 300px;
+    max-height: 200px; /* 设置列表的最大高度 */
+    overflow-y: auto; /* 超出部分显示滚动条 */
+    background: #f9f9f9; /* 背景色，可根据需要调整 */
+    border-radius: 5px; /* 边框圆角 */
+    padding: 10px; /* 内边距 */
+  }
+  .button {
+    width: 60%;
+    margin-top: 10px;
+    padding: 10px;
+    background-color: black;
+    border-radius: 4px;
   }
 </style>
