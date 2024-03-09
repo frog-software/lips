@@ -1,25 +1,12 @@
 <script>
-  import { push, location } from "svelte-spa-router";
-  import { onDestroy } from "svelte";
+  import { push } from "svelte-spa-router";
   import PocketBase from "pocketbase";
   import { PocketBase_URL } from "../utils/api/index";
   import { onMount } from "svelte";
   import { currentUserEmail } from "../store.js";
+
   const pb = new PocketBase(PocketBase_URL);
-  let records = [];
   let username = "";
-  async function checkchan() {
-    try {
-      const userEmail = $currentUserEmail;
-      const response = await pb.collection("users_channels").getFullList({
-        sort: "-created",
-        filter: `useremail="${userEmail}"`,
-      });
-      records = response;
-    } catch (error) {
-      alert("fail to find");
-    }
-  }
   async function checkUser() {
     try {
       const userEmail = $currentUserEmail;
@@ -33,7 +20,6 @@
     }
   }
   onMount(() => {
-    checkchan();
     checkUser();
   });
 
@@ -41,11 +27,6 @@
   function JumpNewPage(address) {
     push("/" + address);
   }
-  let currentpath = "";
-  const unsubscribe = location.subscribe(($location) => {
-    currentpath = $location;
-  });
-  onDestroy(unsubscribe);
 </script>
 
 <h1>LIPS - Lightweight Information Portal Service</h1>
