@@ -28,7 +28,9 @@
 {#each records as record}
   <div class="record">
     <div class="tittle">{record.tittle}</div>
-    <div class="meta">/#{record.tag}/from:{record.useremail}</div>
+    <div class="meta">
+      {record.year}.{record.month}.{record.day}/#{record.tag}/from:{record.useremail}
+    </div>
     <div>{record.body}</div>
   </div>
 {/each}

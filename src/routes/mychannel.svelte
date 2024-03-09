@@ -1,4 +1,4 @@
-<!-- 我的频道： 查看频道 创建频道 删除频道-->
+<!-- 我的频道： 查看频道 创建频道 搜索频道 删除频道-->
 <script>
   import PocketBase from "pocketbase";
   import { PocketBase_URL } from "../utils/api/index";
@@ -33,9 +33,22 @@
     currentchannelid.set(id);
     push("/chantemplate");
   }
+
+  function JumpNewPage(address) {
+    push("/" + address);
+  }
 </script>
 
-<button on:click={toggleModal}>查看频道</button>
+<div class="left-side">
+  <button class="button" on:click={toggleModal}>查看频道</button>
+  <button class="button" on:click={() => JumpNewPage("createChannel")}>
+    创建频道
+  </button>
+  <button class="button" on:click={() => JumpNewPage("searchChannel")}>
+    查找频道
+  </button>
+  <button class="button"> 频道管理 </button>
+</div>
 
 <Modal isOpen={showModal} close={toggleModal}>
   <h2 style="color: black;">已加入的频道</h2>
@@ -68,5 +81,11 @@
     color: #ffffff;
     opacity: 1;
     background-color: #6a6d6e;
+  }
+  .left-side {
+    width: 40%;
+    height: 100vh;
+    /* background-color: #f0f0f0; */
+    /* 添加更多样式 */
   }
 </style>
