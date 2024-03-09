@@ -30,7 +30,17 @@
   }
   let currentpath = "";
 
+  let previousBodyStyle = {};
+
   const unsubscribe = location.subscribe(($location) => {
+    if (currentpath === "/login") {
+      // Save current body style before navigating away
+      previousBodyStyle = {
+        backgroundImage: document.body.style.backgroundImage,
+        backgroundSize: document.body.style.backgroundSize,
+        backgroundPosition: document.body.style.backgroundPosition
+      };
+    }
     currentpath = $location;
   });
   onDestroy(unsubscribe);
@@ -41,6 +51,13 @@
       "url('https://raw.githubusercontent.com/Range-bin/lips/6a1659c21d3e042507f619d6aa1b79083639de8b/loginpage.jpg')";
     document.body.style.backgroundSize = "cover";
     document.body.style.backgroundPosition = "center";
+  });
+
+  onDestroy(() => {
+    // Restore previous body style when leaving the page
+    Object.keys(previousBodyStyle).forEach((key) => {
+      document.body.style[key] = previousBodyStyle[key];
+    });
   });
 </script>
 
@@ -66,10 +83,6 @@
   {/if}
 </main>
 
-<footer>
-  <p>&copy; 2024 Our Website</p>
-</footer>
-
 <style>
   /* 根据需求设置组件样式 */
   main {
@@ -84,10 +97,10 @@
     padding: 20px;
     border-radius: 5px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    width: calc(100vw / 1.618);
-    height: calc((100vw / 1.618) / 1.618);
-    max-width: 520px;
-    max-height: 320px;
+    width: calc(100vw / 1.618 * 1.5); /* 改变宽度 */
+    height: calc((100vw / 1.618) / 1.618 * 1.5); /* 改变高度 */
+    max-width: 780px; /* 改变最大宽度 */
+    max-height: 480px; /* 改变最大高度 */
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -105,8 +118,8 @@
   input[type="email"],
   input[type="password"],
   button {
-    width: 100%;
-    max-width: calc(100% - 40px);
+    width: 150;
+    max-width: calc(300% - 30px);
     box-sizing: border-box;
   }
 
@@ -122,15 +135,5 @@
   }
   .register-link {
     margin-top: 20px;
-  }
-
-  footer {
-    background-color: #333;
-    color: #fff;
-    text-align: center;
-    padding: 10px 0;
-    position: fixed;
-    bottom: 0;
-    width: 100%;
   }
 </style>
