@@ -78,12 +78,8 @@
     height: 100%;
     margin: 0;
     padding: 0;
-  }
-
-  body {
     display: flex;
   }
-
   .username {
     font-size: 27px; /* 或任何您喜欢的大小 */
   }
