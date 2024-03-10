@@ -6,16 +6,16 @@
   import { currentUserEmail } from "../store.js";
 
   const pb = new PocketBase(PocketBase_URL);
-  let username = "";
+  let usereamil = "";
   let password = "";
 
   async function handleLogin() {
     try {
       const userData = await pb
         .collection("users")
-        .authWithPassword(username, password);
+        .authWithPassword(usereamil, password);
       if (userData) {
-        currentUserEmail.set(username);
+        currentUserEmail.set(usereamil);
         const userEmail = $currentUserEmail;
         console.log("当前用户的电子邮件:", userEmail);
         push("/main");
@@ -41,7 +41,7 @@
   <form on:submit|preventDefault={handleLogin}>
     <div class="content-box">
       <div class="item-box">
-        <input type="email" bind:value={username} placeholder="Email" />
+        <input type="email" bind:value={usereamil} placeholder="Email" />
       </div>
       <div class="item-box">
         <input type="password" bind:value={password} placeholder="Password" />
