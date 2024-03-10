@@ -2,10 +2,12 @@
   import PocketBase from "pocketbase";
   import { push } from "svelte-spa-router";
   import { PocketBase_URL } from "../utils/api/index";
-
+  import { currentUserEmail, currentchannelid } from "../store.js";
+  import { onMount } from "svelte";
   let tittle = "";
   let body = "";
   let tag = "";
+  let name = "";
   let currentYear = new Date().getFullYear();
   let currentMonth = new Date().getMonth() + 1; //从0开始
   let currentDate = new Date().getDate();
@@ -14,9 +16,22 @@
   function cancel() {
     push("/main");
   }
-
+  async function getname() {
+    try {
+      const currentemail = $currentUserEmail;
+      const response = await pb.collection("users").getFullList({
+        sort: "-created",
+        filter: `email="${currentemail}"`,
+      });
+      name = response[0].username;
+    } catch (error) {
+      alert("fail to find");
+    }
+  }
   async function post() {
     //异步函数的定义
+    const userEmail = $currentUserEmail;
+    const channelid = $currentchannelid;
     const data = {
       tittle: tittle,
       body: body,
@@ -24,6 +39,9 @@
       year: currentYear,
       month: currentMonth,
       day: currentDate,
+      useremail: userEmail,
+      channelid: channelid,
+      username: name,
     };
     try {
       await pb.collection("notices").create(data);
@@ -42,6 +60,9 @@
   function getDaysInMonth(year, month) {
     return new Date(year, month, 0).getDate();
   }
+  onMount(() => {
+    getname();
+  });
 </script>
 
 <h1>发布你的第一条通知吧！</h1>

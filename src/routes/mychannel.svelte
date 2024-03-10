@@ -1,11 +1,11 @@
-<!-- 查看当前用户创建的todolist 点击查看对应通知-->
+<!-- 我的频道： 查看频道 创建频道 搜索频道 删除频道-->
 <script>
   import PocketBase from "pocketbase";
   import { PocketBase_URL } from "../utils/api/index";
   import { push } from "svelte-spa-router";
   import Modal from "./Modal.svelte";
   import { onMount } from "svelte";
-  import { currentUserEmail, currentnoticeid } from "../store.js";
+  import { currentUserEmail, currentchannelid } from "../store.js";
 
   const pb = new PocketBase(PocketBase_URL);
   let records = [];
@@ -13,7 +13,7 @@
   async function checkchan() {
     try {
       const userEmail = $currentUserEmail;
-      const response = await pb.collection("todolist").getFullList({
+      const response = await pb.collection("users_channels").getFullList({
         sort: "-created",
         filter: `useremail="${userEmail}"`,
       });
@@ -22,26 +22,40 @@
       alert("fail to find");
     }
   }
-  function jumpnew(id) {
-    currentnoticeid.set(id);
-    push("/checknotice");
-  }
   function toggleModal() {
     showModal = !showModal;
   }
   onMount(() => {
     checkchan();
   });
+
+  function jumpnew(id) {
+    currentchannelid.set(id);
+    push("/chantemplate");
+  }
+
+  function JumpNewPage(address) {
+    push("/" + address);
+  }
 </script>
 
-<button on:click={toggleModal}>查看todolist</button>
+<div class="left-side">
+  <button class="button" on:click={toggleModal}>查看频道</button>
+  <button class="button" on:click={() => JumpNewPage("createChannel")}>
+    创建频道
+  </button>
+  <button class="button" on:click={() => JumpNewPage("searchChannel")}>
+    查找频道
+  </button>
+  <button class="button"> 频道管理 </button>
+</div>
 
 <Modal isOpen={showModal} close={toggleModal}>
-  <h2 style="color: black;">todolist</h2>
+  <h2 style="color: black;">已加入的频道</h2>
   <div class="container">
     {#each records as record}
-      <button class="button" on:click={() => jumpnew(record.noticeid)}
-        >#{record.tittle}</button
+      <button class="button" on:click={() => jumpnew(record.id)}
+        >#{record.channelname}</button
       >
     {/each}
   </div>
@@ -67,5 +81,11 @@
     color: #ffffff;
     opacity: 1;
     background-color: #6a6d6e;
+  }
+  .left-side {
+    width: 40%;
+    height: 100vh;
+    /* background-color: #f0f0f0; */
+    /* 添加更多样式 */
   }
 </style>
