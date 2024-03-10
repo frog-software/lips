@@ -36,7 +36,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    z-index: 1000;
+    z-index: 1000; /* 确保这个值足够高 */
   }
 
   .modal-content {
@@ -44,11 +44,5 @@
     padding: 30px;
     border-radius: 8px;
     position: relative;
-    display: flex;
-    flex-direction: column;
-    overflow: hidden;
   }
 </style>
-
-
-
