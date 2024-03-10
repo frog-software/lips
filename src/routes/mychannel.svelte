@@ -1,4 +1,3 @@
-<!-- 我的频道： 查看频道 创建频道 搜索频道 删除频道-->
 <script>
   import PocketBase from "pocketbase";
   import { PocketBase_URL } from "../utils/api/index";
@@ -10,6 +9,9 @@
   const pb = new PocketBase(PocketBase_URL);
   let records = [];
   let showModal = false;
+  let createdChannels = []; // 存储用户创建的频道列表
+  let currentTab = 'joined'; // 控制显示'joined'或'created'列表
+
   async function checkchan() {
     try {
       const userEmail = $currentUserEmail;
@@ -19,14 +21,29 @@
       });
       records = response;
     } catch (error) {
-      alert("fail to find");
+      alert("fail to find joined channels");
     }
   }
+
+  async function fetchCreatedChannels() {
+    try {
+      const userEmail = $currentUserEmail;
+      const response = await pb.collection("channels").getFullList({
+        filter: `useremail="${userEmail}"`,
+      });
+      createdChannels = response;
+    } catch (error) {
+      alert("Failed to fetch created channels");
+    }
+  }
+
   function toggleModal() {
     showModal = !showModal;
   }
+
   onMount(() => {
     checkchan();
+    fetchCreatedChannels();
   });
 
   function jumpnew(id) {
@@ -41,51 +58,101 @@
 
 <div class="left-side">
   <button class="button" on:click={toggleModal}>查看频道</button>
-  <button class="button" on:click={() => JumpNewPage("createChannel")}>
-    创建频道
-  </button>
-  <button class="button" on:click={() => JumpNewPage("searchChannel")}>
-    查找频道
-  </button>
-  <button class="button"> 频道管理 </button>
+  <button class="button" on:click={() => JumpNewPage("createChannel")}>创建频道</button>
+  <button class="button" on:click={() => JumpNewPage("searchChannel")}>查找频道</button>
+  <button class="button">频道管理</button>
 </div>
 
 <Modal isOpen={showModal} close={toggleModal}>
-  <h2 style="color: black;">已加入的频道</h2>
+  <div class="tabs">
+    <button class="tab-btn" class:selected={currentTab === 'joined'} on:click={() => currentTab = 'joined'}>已加入的频道</button>
+    <button class="tab-btn" class:selected={currentTab === 'created'} on:click={() => currentTab = 'created'}>我创建的频道</button>
+  </div>
+  {#if currentTab === 'joined'}
   <div class="container">
     {#each records as record}
-      <button class="button" on:click={() => jumpnew(record.id)}
-        >#{record.channelname}</button
-      >
+    <button class="button" on:click={() => jumpnew(record.id)}>#{record.channelname}</button>
     {/each}
   </div>
+  {/if}
+  {#if currentTab === 'created'}
+  <div class="container">
+    {#each createdChannels as channel}
+    <button class="button" on:click={() => jumpnew(channel.id)}>#{channel.channelName}</button>
+    {/each}
+  </div>
+  {/if}
 </Modal>
 
 <style>
+  .tabs {
+    display: flex;
+    justify-content: center; /* 居中对齐以适应现代设计 */
+    background-color: #333; /* 深色背景以强调选项卡 */
+    padding: 1rem;
+    gap: 1rem; /* 添加间隙确保视觉分隔 */
+  }
+
+  .tab-btn {
+    background-color: transparent;
+    border: none;
+    padding: 0.5rem 1rem;
+    color: #ccc; /* 淡色字体 */
+    font-size: 1rem;
+    cursor: pointer;
+    transition: color 0.3s, background-color 0.3s; /* 平滑过渡效果 */
+  }
+
+  .tab-btn:hover, .tab-btn.selected {
+    color: #fff; /* 高亮颜色 */
+    background-color: #555; /* 按钮背景变化 */
+    border-radius: 20px; /* 圆角效果 */
+  }
+
   .container {
-    max-width: 300px;
-    max-height: 200px; /* 设置列表的最大高度 */
-    overflow-y: auto; /* 超出部分显示滚动条 */
-    background: #f9f9f9; /* 背景色，可根据需要调整 */
-    border-radius: 5px; /* 边框圆角 */
-    padding: 10px; /* 内边距 */
+    background-color: #2c2c2c; /* 深色背景 */
+    max-width: 100%; /* 充满可用宽度 */
+    max-height: 200px; /* 固定高度 */
+    overflow-y: auto; /* 启用滚动 */
+    padding: 1rem; /* 更多内边距 */
+    border-radius: 10px; /* 圆角效果 */
+    margin-top: 1rem; /* 与选项卡分隔 */
   }
+
   .button {
-    width: 60%;
-    margin-top: 10px;
-    padding: 10px;
-    background-color: black;
+    width: 100%;
+    margin-top: 0.5rem;
+    padding: 0.5rem 0;
+    background-color: #555;
+    color: #fff;
+    border: none;
     border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s; /* 平滑背景色过渡 */
   }
+
   .button:hover {
-    color: #ffffff;
-    opacity: 1;
-    background-color: #6a6d6e;
+    background-color: #666; /* 悬停时颜色变化 */
   }
+
   .left-side {
-    width: 40%;
+    width: 250px; /* 固定左侧宽度 */
     height: 100vh;
-    /* background-color: #f0f0f0; */
-    /* 添加更多样式 */
+    padding: 1rem;
+  }
+
+  /* 滚动条样式 */
+  .container::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  .container::-webkit-scrollbar-thumb {
+    background-color: #888;
+    border-radius: 10px;
+  }
+
+  .container::-webkit-scrollbar-track {
+    background-color: #333;
   }
 </style>
+

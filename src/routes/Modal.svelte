@@ -36,13 +36,23 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    z-index: 1000; /* 确保这个值足够高 */
+    z-index: 1000;
   }
 
   .modal-content {
-    background: rgb(199, 195, 195);
-    padding: 20px;
-    border-radius: 8px;
+    background: #333; /* 暗色主题背景 */
+    color: #ccc; /* 浅色文字 */
+    padding: 2rem;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5); /* 更为显著的阴影效果 */
+    width: auto;
+    max-width: 600px;
     position: relative;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
   }
 </style>
+
+
+
