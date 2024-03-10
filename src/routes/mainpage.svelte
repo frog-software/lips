@@ -4,7 +4,11 @@
   import { PocketBase_URL } from "../utils/api/index";
   import { onMount } from "svelte";
   import Modal from "./Modal.svelte";
-  import { currentUserEmail, currentchannelid ,currentnoticeid } from "../store.js";
+  import {
+    currentUserEmail,
+    currentchannelid,
+    currentnoticeid,
+  } from "../store.js";
 
   const pb = new PocketBase(PocketBase_URL);
   let username = "";
@@ -40,7 +44,7 @@
       alert("fail to find");
     }
   }
-  
+
   function check(id) {
     currentnoticeid.set(id);
     push("/checknotice");
@@ -49,16 +53,15 @@
   function toggleModal() {
     showModal = !showModal;
   }
-  function toggleModal2(){
+  function toggleModal2() {
     showModal2 = !showModal2;
   }
-  function toggleModal3(){
+  function toggleModal3() {
     showModal3 = !showModal3;
   }
-  function toggleModal4(){
+  function toggleModal4() {
     showModal4 = !showModal4;
   }
-
 
   function jumpnew(id) {
     currentchannelid.set(id);
@@ -118,13 +121,13 @@
         <Modal isOpen={showModal2} close={toggleModal2}>
           <div>
             <h2 style="color: black;">频道管理</h2>
-      <div class="container">
-        {#each records as record}
-          <button class="button01" on:click={() => jumpnew(record.id)}
-            >#{record.channelname}</button
-          >
-        {/each}
-      </div>
+            <div class="container">
+              {#each records as record}
+                <button class="button01" on:click={() => jumpnew(record.id)}
+                  >#{record.channelname}</button
+                >
+              {/each}
+            </div>
           </div>
         </Modal>
       </div>
@@ -141,27 +144,25 @@
       <h2 style="color: black;">通知管理</h2>
       <div class="container">
         {#each recordsNotice as record}
-      <div
-        class="record"
-        role="button"
-        tabindex="0"
-        on:click={() => check(record.id)}
-        on:keypress
-      >
-        <div class="title">{record.tittle}</div>
-        <div class="content">#{record.tag}</div>
-        <div class="author">from:{record.username}</div>
-      </div>
-    {/each}
+          <div
+            class="record"
+            role="button"
+            tabindex="0"
+            on:click={() => check(record.id)}
+            on:keypress
+          >
+            <div class="title">{record.tittle}</div>
+            <div class="content">#{record.tag}</div>
+            <div class="author">from:{record.username}</div>
+          </div>
+        {/each}
       </div>
     </Modal>
 
     <button class="button-present" on:click={toggleModal4}>待办事项</button>
     <Modal isOpen={showModal4} close={toggleModal4}>
       <h2 style="color: black;">待办事项</h2>
-      <div class="container">
-        
-      </div>
+      <div class="container"></div>
     </Modal>
     <!-- <button
       class="button-present"
