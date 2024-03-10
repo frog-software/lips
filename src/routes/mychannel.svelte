@@ -10,7 +10,7 @@
   let records = [];
   let showModal = false;
   let createdChannels = []; // 存储用户创建的频道列表
-  let currentTab = 'joined'; // 控制显示'joined'或'created'列表
+  let currentTab = "joined"; // 控制显示'joined'或'created'列表
 
   async function checkchan() {
     try {
@@ -58,29 +58,45 @@
 
 <div class="left-side">
   <button class="button" on:click={toggleModal}>查看频道</button>
-  <button class="button" on:click={() => JumpNewPage("createChannel")}>创建频道</button>
-  <button class="button" on:click={() => JumpNewPage("searchChannel")}>查找频道</button>
+  <button class="button" on:click={() => JumpNewPage("createChannel")}
+    >创建频道</button
+  >
+  <button class="button" on:click={() => JumpNewPage("searchChannel")}
+    >查找频道</button
+  >
   <button class="button">频道管理</button>
 </div>
 
 <Modal isOpen={showModal} close={toggleModal}>
   <div class="tabs">
-    <button class="tab-btn" class:selected={currentTab === 'joined'} on:click={() => currentTab = 'joined'}>已加入的频道</button>
-    <button class="tab-btn" class:selected={currentTab === 'created'} on:click={() => currentTab = 'created'}>我创建的频道</button>
+    <button
+      class="tab-btn"
+      class:selected={currentTab === "joined"}
+      on:click={() => (currentTab = "joined")}>已加入的频道</button
+    >
+    <button
+      class="tab-btn"
+      class:selected={currentTab === "created"}
+      on:click={() => (currentTab = "created")}>我创建的频道</button
+    >
   </div>
-  {#if currentTab === 'joined'}
-  <div class="container">
-    {#each records as record}
-    <button class="button" on:click={() => jumpnew(record.id)}>#{record.channelname}</button>
-    {/each}
-  </div>
+  {#if currentTab === "joined"}
+    <div class="container">
+      {#each records as record}
+        <button class="button" on:click={() => jumpnew(record.id)}
+          >#{record.channelname}</button
+        >
+      {/each}
+    </div>
   {/if}
-  {#if currentTab === 'created'}
-  <div class="container">
-    {#each createdChannels as channel}
-    <button class="button" on:click={() => jumpnew(channel.id)}>#{channel.channelName}</button>
-    {/each}
-  </div>
+  {#if currentTab === "created"}
+    <div class="container">
+      {#each createdChannels as channel}
+        <button class="button" on:click={() => jumpnew(channel.id)}
+          >#{channel.channelName}</button
+        >
+      {/each}
+    </div>
   {/if}
 </Modal>
 
@@ -100,10 +116,13 @@
     color: #ccc; /* 淡色字体 */
     font-size: 1rem;
     cursor: pointer;
-    transition: color 0.3s, background-color 0.3s; /* 平滑过渡效果 */
+    transition:
+      color 0.3s,
+      background-color 0.3s; /* 平滑过渡效果 */
   }
 
-  .tab-btn:hover, .tab-btn.selected {
+  .tab-btn:hover,
+  .tab-btn.selected {
     color: #fff; /* 高亮颜色 */
     background-color: #555; /* 按钮背景变化 */
     border-radius: 20px; /* 圆角效果 */
@@ -155,4 +174,3 @@
     background-color: #333;
   }
 </style>
-

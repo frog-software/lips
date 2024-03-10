@@ -2,7 +2,7 @@
   import { push } from "svelte-spa-router";
   import PocketBase from "pocketbase";
   import { PocketBase_URL } from "../utils/api/index";
-  import { get } from 'svelte/store'; // 引入 get 函数来同步读取 Svelte 存储的值
+  import { get } from "svelte/store"; // 引入 get 函数来同步读取 Svelte 存储的值
   import { currentUserEmail } from "../store.js";
   const pb = new PocketBase(PocketBase_URL);
   let channelName = "";
@@ -28,7 +28,7 @@
     const data = {
       channelName: channelName,
       channelDescription: channelDescription,
-      useremail: userEmail // 添加用户邮箱字段
+      useremail: userEmail, // 添加用户邮箱字段
     };
 
     try {

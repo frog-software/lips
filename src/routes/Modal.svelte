@@ -53,6 +53,3 @@
     overflow: hidden;
   }
 </style>
-
-
-
