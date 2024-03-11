@@ -2,14 +2,16 @@
   import { push } from "svelte-spa-router";
   import PocketBase from "pocketbase";
   import { PocketBase_URL } from "../utils/api/index";
-
+  import { get } from "svelte/store"; // 引入 get 函数来同步读取 Svelte 存储的值
+  import { currentUserEmail } from "../store.js";
   const pb = new PocketBase(PocketBase_URL);
   let channelName = "";
   let channelDescription = "";
-  let isLoading = false; // 新增：用于跟踪提交状态
+  let isLoading = false;
 
   async function handleCreate() {
     isLoading = true;
+    const userEmail = get(currentUserEmail); // 同步获取当前用户邮箱
 
     // 检查频道名是否已存在
     const existingChannels = await pb
@@ -26,6 +28,7 @@
     const data = {
       channelName: channelName,
       channelDescription: channelDescription,
+      useremail: userEmail, // 添加用户邮箱字段
     };
 
     try {

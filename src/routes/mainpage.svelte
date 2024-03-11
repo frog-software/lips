@@ -13,6 +13,8 @@
   const pb = new PocketBase(PocketBase_URL);
   let username = "";
   let records = [];
+  let createdChannels = []; // 存储用户创建的频道列表
+  let currentTab = "joined"; // 控制显示'joined'或'created'列表
   let showModal = false;
   let showModal2 = false;
   let showModal3 = false;
@@ -28,6 +30,18 @@
       records = response;
     } catch (error) {
       alert("fail to find");
+    }
+  }
+
+  async function fetchCreatedChannels() {
+    try {
+      const userEmail = $currentUserEmail;
+      const response = await pb.collection("channels").getFullList({
+        filter: `useremail="${userEmail}"`,
+      });
+      createdChannels = response;
+    } catch (error) {
+      alert("Failed to fetch created channels");
     }
   }
 
@@ -84,6 +98,7 @@
     checkUser();
     checkchan();
     checkNotice();
+    fetchCreatedChannels();
   });
 
   let src = "userPicture.jpeg";
@@ -118,19 +133,40 @@
           查找频道
         </button>
         <button class="button01" on:click={toggleModal2}>我的频道</button>
-        <Modal isOpen={showModal2} close={toggleModal2}>
-          <div>
-            <h2 style="color: black;">频道管理</h2>
-            <div class="container">
-              {#each records as record}
-                <button class="button01" on:click={() => jumpnew(record.id)}
-                  >#{record.channelname}</button
-                >
-              {/each}
-            </div>
-          </div>
-        </Modal>
       </div>
+    </Modal>
+
+    <Modal isOpen={showModal2} close={toggleModal2}>
+      <div class="tabs">
+        <button
+          class="tab-btn"
+          class:selected={currentTab === "joined"}
+          on:click={() => (currentTab = "joined")}>已加入的频道</button
+        >
+        <button
+          class="tab-btn"
+          class:selected={currentTab === "created"}
+          on:click={() => (currentTab = "created")}>我创建的频道</button
+        >
+      </div>
+      {#if currentTab === "joined"}
+        <div class="container01">
+          {#each records as record}
+            <button class="button02" on:click={() => jumpnew(record.id)}
+              >#{record.channelname}</button
+            >
+          {/each}
+        </div>
+      {/if}
+      {#if currentTab === "created"}
+        <div class="container01">
+          {#each createdChannels as channel}
+            <button class="button02" on:click={() => jumpnew(channel.id)}
+              >#{channel.channelName}</button
+            >
+          {/each}
+        </div>
+      {/if}
     </Modal>
     <!-- <button class="button-present" on:click={() => JumpNewPage("mychannel")}>
       频道</button
@@ -267,5 +303,97 @@
   .author {
     font-size: 14px;
     color: #666;
+  }
+  .tabs {
+    display: flex;
+    justify-content: center; /* 居中对齐以适应现代设计 */
+    background-color: #333; /* 深色背景以强调选项卡 */
+    padding: 1rem;
+    gap: 1rem; /* 添加间隙确保视觉分隔 */
+  }
+
+  .tab-btn {
+    background-color: transparent;
+    border: none;
+    padding: 0.5rem 1rem;
+    color: #ccc; /* 淡色字体 */
+    font-size: 1rem;
+    cursor: pointer;
+    transition:
+      color 0.3s,
+      background-color 0.3s; /* 平滑过渡效果 */
+  }
+
+  .tab-btn:hover,
+  .tab-btn.selected {
+    color: #fff; /* 高亮颜色 */
+    background-color: #555; /* 按钮背景变化 */
+    border-radius: 20px; /* 圆角效果 */
+  }
+
+  .button02 {
+    width: 50%;
+    margin-top: 0.5rem;
+    padding: 0.5rem 0;
+    color: #fff;
+    background: linear-gradient(to right, #575757, #414141); /* 添加渐变背景 */
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out; /* 平滑所有过渡效果 */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* 添加轻微阴影效果 */
+    position: relative; /* 为了做出点击效果，需要相对定位 */
+    overflow: hidden; /* 防止子元素溢出 */
+  }
+
+  .button02::after {
+    content: "";
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    background: rgba(255, 255, 255, 0.1); /* 轻微的白色覆盖层 */
+    opacity: 0;
+    transition: opacity 0.3s ease-in-out;
+  }
+
+  .button02:hover {
+    background: linear-gradient(
+      to right,
+      #656565,
+      #4b4b4b
+    ); /* 悬停时更深的渐变色 */
+  }
+
+  .button02:hover::after {
+    opacity: 1; /* 鼠标悬停时显示白色覆盖层 */
+  }
+
+  .button02:active {
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2); /* 按钮按下时的内部阴影 */
+  }
+
+  .container01 {
+    background-color: #2c2c2c; /* 深色背景 */
+    max-width: 100%; /* 充满可用宽度 */
+    max-height: 200px; /* 固定高度 */
+    overflow-y: auto; /* 启用滚动 */
+    padding: 1rem; /* 更多内边距 */
+    border-radius: 10px; /* 圆角效果 */
+    margin-top: 1rem; /* 与选项卡分隔 */
+  }
+  /* 滚动条样式 */
+  .container01::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  .container01::-webkit-scrollbar-thumb {
+    background-color: #888;
+    border-radius: 10px;
+  }
+
+  .container01::-webkit-scrollbar-track {
+    background-color: #333;
   }
 </style>
