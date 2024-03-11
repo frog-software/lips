@@ -2,6 +2,7 @@
   import { push } from "svelte-spa-router";
   import PocketBase from "pocketbase";
   import { PocketBase_URL } from "../utils/api/index";
+  import { currentUserEmail } from "../store.js";
 
   const pb = new PocketBase(PocketBase_URL);
   let channelName = "";
@@ -22,10 +23,11 @@
       isLoading = false;
       return;
     }
-
+    const userEmail = $currentUserEmail;
     const data = {
       channelName: channelName,
       channelDescription: channelDescription,
+      useremail: userEmail,
     };
 
     try {
