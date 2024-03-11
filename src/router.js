@@ -8,7 +8,6 @@ import SearchChannel from "./routes/searchChannel.svelte";
 import SendNotification from "./routes/sendNotification.svelte";
 import Participants from "./routes/participants.svelte";
 import SelectTags from "./routes/selectTags.svelte";
-import Mychannel from "./routes/mychannel.svelte";
 import Mynotice from "./routes/mynotice.svelte";
 import Chantemplate from "./routes/chantemplate.svelte";
 import Checknotice from "./routes/checknotice.svelte";
@@ -24,7 +23,6 @@ export default {
   "/postnotice": SendNotification,
   "/participants": Participants,
   "/selectTags": SelectTags,
-  "/mychannel": Mychannel,
   "/mynotice": Mynotice,
   "/chantemplate": Chantemplate,
   "/checknotice": Checknotice,
