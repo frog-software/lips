@@ -1,6 +1,6 @@
 <!-- 显示通知具体内容 -->
 <script>
-  import { currentUserEmail,currentnoticeid } from "../store.js";
+  import { currentUserEmail, currentnoticeid } from "../store.js";
   import PocketBase from "pocketbase";
   import { PocketBase_URL } from "../utils/api/index";
   import { onMount } from "svelte";
@@ -44,8 +44,6 @@
   });
 </script>
 
-
-
 {#each records as record}
   <div class="record">
     <div class="tittle">{record.tittle}</div>
@@ -59,7 +57,7 @@
 
 <style>
   .record {
-    width: auto; 
+    width: auto;
     border: 1px solid #ccc;
     padding: 15px;
     margin: 10px 0;

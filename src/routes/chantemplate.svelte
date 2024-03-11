@@ -8,7 +8,7 @@
 
   const pb = new PocketBase(PocketBase_URL);
   let records = [];
-  let tags= [];
+  let tags = [];
   async function noticedisplay() {
     try {
       const channel = $currentchannelid;
@@ -16,8 +16,8 @@
         sort: "-created",
         filter: `channelid="${channel}"`,
       });
-      const names = responses.map(response => response.tag);
-      tags= [...new Set(names)];
+      const names = responses.map((response) => response.tag);
+      tags = [...new Set(names)];
       records = responses;
     } catch (error) {
       alert("fail to find");
@@ -50,9 +50,13 @@
         on:click={() => check(record.id)}
         on:keypress
       >
-        <a href=#/checknotice class="title">{record.tittle}</a>
+        <a href="#/checknotice" class="title">{record.tittle}</a>
         <div class="author">#{record.tag} from:{record.username}</div>
-        <div class="content">{record.body.length > 10 ? `${record.body.substring(0, 10)}...` : record.body}</div>
+        <div class="content">
+          {record.body.length > 10
+            ? `${record.body.substring(0, 10)}...`
+            : record.body}
+        </div>
       </div>
     {/each}
   </div>
@@ -65,7 +69,7 @@
 </div>
 
 <style>
-  .h2{
+  .h2 {
     text-align: left;
   }
   .record {
@@ -74,19 +78,20 @@
     background-color: #ffffff;
     text-align: left;
   }
-  .record:hover,.tag:hover {
+  .record:hover,
+  .tag:hover {
     color: #ffffff;
     opacity: 1;
     background-color: #e9ebeb;
   }
-  .tag{
-    width:20%;
+  .tag {
+    width: 20%;
     padding: 10px;
     background-color: #ffffff;
   }
   .title {
     text-decoration: underline; /* 为标题添加下划线 */
-    color: #0000EE;
+    color: #0000ee;
     font-size: 24px;
     font-weight: bold;
     margin-bottom: 10px;
@@ -108,9 +113,9 @@
     padding: 10px;
   }
   .left {
-  flex-grow: 1; /* 让两边占据相等的空间，也可以根据需要调整 */
-}
-  .right{
+    flex-grow: 1; /* 让两边占据相等的空间，也可以根据需要调整 */
+  }
+  .right {
     flex-basis: 20%;
   }
 </style>
