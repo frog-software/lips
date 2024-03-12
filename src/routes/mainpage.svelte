@@ -4,6 +4,7 @@
   import { PocketBase_URL } from "../utils/api/index";
   import { onMount } from "svelte";
   import Modal from "./Modal.svelte";
+  import EditChannelModal from "./EditChannelModal.svelte";
   import {
     currentUserEmail,
     currentchannelid,
@@ -19,6 +20,55 @@
   let showModal2 = false;
   let showModal3 = false;
   let showModal4 = false;
+  let selectedChannel = null;
+
+  function editChannel(channelName) {
+    const channel = createdChannels.find((c) => c.channelName === channelName);
+    if (channel) {
+      selectedChannel = channel;
+    }
+  }
+
+  function handleUpdate() {
+    fetchCreatedChannels(); // 重新获取频道列表
+    checkchan();
+    selectedChannel = null; // 重置selectedChannel，关闭编辑模态框
+  }
+
+  async function deleteChannel(channelName) {
+    if (!confirm("确定要删除这个频道吗？")) {
+      return; // 用户取消操作，直接返回
+    }
+
+    try {
+      // 查找channels集合中的指定频道
+      const channels = await pb.collection("channels").getFullList({
+        filter: `channelName="${channelName}"`,
+      });
+      for (const channel of channels) {
+        // 删除找到的频道
+        await pb.collection("channels").delete(channel.id);
+      }
+
+      // 查找并删除users_channels集合中所有与该频道相关的条目
+      const userChannels = await pb.collection("users_channels").getFullList({
+        filter: `channelname="${channelName}"`,
+      });
+      for (const userChannel of userChannels) {
+        await pb.collection("users_channels").delete(userChannel.id);
+      }
+      // 使用.filter()方法移除条目后直接赋值
+      createdChannels = createdChannels.filter(
+        (channel) => channel.channelName !== channelName,
+      );
+      fetchCreatedChannels(); // 重新获取频道列表
+      checkchan();
+      alert("频道及相关数据删除成功。");
+    } catch (error) {
+      console.error("删除频道及相关数据失败：", error);
+      alert("删除频道及相关数据失败。");
+    }
+  }
 
   async function checkchan() {
     try {
@@ -161,11 +211,28 @@
       {#if currentTab === "created"}
         <div class="container01">
           {#each createdChannels as channel}
-            <button class="button02" on:click={() => jumpnew(channel.id)}
-              >#{channel.channelName}</button
-            >
+            <div class="channel-row">
+              <button class="button02" on:click={() => jumpnew(channel.id)}>
+                #{channel.channelName}
+              </button>
+              <button
+                class="edit-btn"
+                on:click={() => editChannel(channel.channelName)}>修改</button
+              >
+              <button
+                class="delete-btn"
+                on:click={() => deleteChannel(channel.channelName)}>删除</button
+              >
+            </div>
           {/each}
         </div>
+      {/if}
+      {#if selectedChannel}
+        <EditChannelModal
+          channel={selectedChannel}
+          on:update={handleUpdate}
+          on:close={() => (selectedChannel = null)}
+        />
       {/if}
     </Modal>
     <!-- <button class="button-present" on:click={() => JumpNewPage("mychannel")}>
@@ -395,5 +462,31 @@
 
   .container01::-webkit-scrollbar-track {
     background-color: #333;
+  }
+  .edit-btn,
+  .delete-btn {
+    margin-left: 0.5rem;
+    padding: 0.3rem 0.6rem;
+    font-size: 0.8rem;
+    background-color: #4e4e4e; /* 按钮的背景颜色 */
+    color: white;
+    border: none;
+    border-radius: 2px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+
+  .edit-btn:hover {
+    background-color: #5c5c5c; /* 修改按钮悬停时的背景颜色 */
+  }
+
+  .delete-btn:hover {
+    background-color: #a54444; /* 删除按钮悬停时的背景颜色 */
+  }
+
+  .channel-row {
+    display: flex;
+    align-items: center;
+    justify-content: start;
   }
 </style>
