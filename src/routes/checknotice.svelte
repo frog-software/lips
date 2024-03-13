@@ -45,7 +45,6 @@
   });
 </script>
 
-
 {#each records as record}
   <div class="record">
     <div class="tittle">{record.tittle}</div>
@@ -54,10 +53,8 @@
     </div>
     <div>{record.body}</div>
     <button class="but" on:click={() => copy(record)}>+ todolist</button>
-
   </div>
-  {/each}
-
+{/each}
 
 <style>
   .record {
@@ -66,7 +63,6 @@
     padding: 15px;
     margin: 10px 0;
     background-color: #f9f9f9;
-
   }
 
   .tittle {
