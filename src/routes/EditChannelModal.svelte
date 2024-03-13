@@ -61,3 +61,39 @@
     <button type="submit">Save Changes</button>
   </form>
 </Modal>
+
+<style>
+  form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px; /* 输入框和按钮之间的间隔 */
+    width: 80%; /* 或者指定一个宽度，如300px */
+    height: 80%;
+    max-width: 600px; /* 最大宽度，确保在大屏幕上也不会太宽 */
+    padding: 5px; /* 表单内边距 */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* 轻微的阴影效果 */
+    border-radius: 8px; /* 轻微的圆角效果 */
+  }
+
+  input,
+  textarea {
+    padding: 10px; /* 输入区域的内边距 */
+    border: 1px solid #ccc; /* 边框颜色 */
+    border-radius: 4px; /* 输入区域的圆角 */
+    font-size: 16px; /* 文本大小 */
+  }
+
+  button[type="submit"] {
+    padding: 10px 20px;
+    background-color: #007bff; /* 按钮背景颜色 */
+    color: white; /* 按钮文字颜色 */
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+  }
+
+  button[type="submit"]:hover {
+    background-color: #0056b3; /* 鼠标悬停时的按钮背景颜色 */
+  }
+</style>

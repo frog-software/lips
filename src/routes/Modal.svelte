@@ -44,5 +44,7 @@
     padding: 30px;
     border-radius: 8px;
     position: relative;
+    /* width: 100%;
+    height: 100%; */
   }
 </style>
