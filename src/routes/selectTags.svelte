@@ -73,6 +73,7 @@
         day: check.day,
         useremail: userEmail,
         noticeid: check.id,
+        username: check.username,
       };
       await pb.collection("todolist").create(newRecord);
       alert("添加成功！");

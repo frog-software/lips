@@ -8,14 +8,17 @@
 
   const pb = new PocketBase(PocketBase_URL);
   let records = [];
+  let tags = [];
   async function noticedisplay() {
     try {
       const channel = $currentchannelid;
-      const response = await pb.collection("notices").getFullList({
+      const responses = await pb.collection("notices").getFullList({
         sort: "-created",
         filter: `channelid="${channel}"`,
       });
-      records = response;
+      const names = responses.map((response) => response.tag);
+      tags = [...new Set(names)];
+      records = responses;
     } catch (error) {
       alert("fail to find");
     }
@@ -37,30 +40,59 @@
 
 <button on:click={send}>发送通知</button>
 
-{#each records as record}
-  <div
-    class="record"
-    role="button"
-    tabindex="0"
-    on:click={() => check(record.id)}
-    on:keypress
-  >
-    <div class="title">{record.tittle}</div>
-    <div class="content">#{record.tag}</div>
-    <div class="author">from:{record.useremail}</div>
+<div class="container">
+  <div class="left">
+    {#each records as record}
+      <div
+        class="record"
+        role="button"
+        tabindex="0"
+        on:click={() => check(record.id)}
+        on:keypress
+      >
+        <a href="#/checknotice" class="title">{record.tittle}</a>
+        <div class="author">#{record.tag} from:{record.username}</div>
+        <div class="content">
+          {record.body.length > 10
+            ? `${record.body.substring(0, 10)}...`
+            : record.body}
+        </div>
+      </div>
+    {/each}
   </div>
-{/each}
+  <div class="right">
+    <h2 class="h2">Tags</h2>
+    {#each tags as tag}
+      <div class="tag">{tag}</div>
+    {/each}
+  </div>
+</div>
 
 <style>
-  .record {
-    margin-bottom: 20px;
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    background-color: #ffffff;
+  .h2 {
+    text-align: left;
+    color: #ffffff;
   }
-
+  .record {
+    width: 80%;
+    padding: 40px;
+    background-color: #ffffff;
+    text-align: left;
+  }
+  .record:hover,
+  .tag:hover {
+    color: #ffffff;
+    opacity: 1;
+    background-color: #e9ebeb;
+  }
+  .tag {
+    width: 20%;
+    padding: 10px;
+    color: #ffffff;
+  }
   .title {
+    text-decoration: underline; /* 为标题添加下划线 */
+    color: #0000ee;
     font-size: 24px;
     font-weight: bold;
     margin-bottom: 10px;
@@ -73,5 +105,18 @@
   .author {
     font-size: 14px;
     color: #666;
+  }
+  .container {
+    display: flex;
+    width: 100%;
+    justify-content: space-between; /* 两侧对齐 */
+    align-items: flex-start; /* 顶部对齐 */
+    padding: 10px;
+  }
+  .left {
+    flex-grow: 1; /* 让两边占据相等的空间，也可以根据需要调整 */
+  }
+  .right {
+    flex-basis: 20%;
   }
 </style>

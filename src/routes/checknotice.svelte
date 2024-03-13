@@ -1,7 +1,7 @@
 <!-- 显示通知具体内容 -->
 
 <script>
-  import { currentnoticeid } from "../store.js";
+  import { currentUserEmail, currentnoticeid } from "../store.js";
   import PocketBase from "pocketbase";
   import { PocketBase_URL } from "../utils/api/index";
   import { onMount } from "svelte";
@@ -20,26 +20,41 @@
       alert("fail to find");
     }
   }
-
+  async function copy(check) {
+    try {
+      const userEmail = $currentUserEmail;
+      const newRecord = {
+        tittle: check.tittle,
+        body: check.body,
+        tag: check.tag,
+        year: check.year,
+        month: check.month,
+        day: check.day,
+        useremail: userEmail,
+        noticeid: check.id,
+        username: check.username,
+      };
+      await pb.collection("todolist").create(newRecord);
+      alert("添加成功！");
+    } catch (error) {
+      alert("添加失败。");
+    }
+  }
   onMount(() => {
     noticedisplay();
   });
 </script>
 
-<body class="bodydiv">
-  <div class="noticeSize">
-    {#each records as record}
-      <div class="record">
-        <div class="tittle">{record.tittle}</div>
-        <div class="meta">
-          <span class="date">{record.year}.{record.month}.{record.day}</span>
-          <!-- {record.year}.{record.month}.{record.day}/#{record.tag}/from:{record.username} -->
-          <span class="tag">/ #{record.tag}</span>
-          <div class="from">from: {record.username}</div>
-        </div>
-        <div class="noticeBody">{record.body}</div>
-      </div>
-    {/each}
+
+{#each records as record}
+  <div class="record">
+    <div class="tittle">{record.tittle}</div>
+    <div class="meta">
+      {record.year}.{record.month}.{record.day}/#{record.tag}/from:{record.username}
+    </div>
+    <div>{record.body}</div>
+    <button class="but" on:click={() => copy(record)}>+ todolist</button>
+
   </div>
 </body>
 
@@ -76,8 +91,12 @@
   }
 
   .record {
-    border-bottom: 1px solid #eee; /* 每条记录之间用细线分隔，清晰区分 */
-    padding: 15px 0; /* 增加记录内的上下边距 */
+    width: auto;
+    border: 1px solid #ccc;
+    padding: 15px;
+    margin: 10px 0;
+    background-color: #f9f9f9;
+
   }
 
   .tittle {
@@ -97,5 +116,9 @@
     font-size: 20px; /* 正文适中的字体大小 */
     line-height: 1.6; /* 增加行高，提高阅读舒适度 */
     color: #444; /* 正文颜色，深于元数据，浅于标题 */
+  }
+
+  .but {
+    color: black; /* 设置字体颜色为黑色 */
   }
 </style>
