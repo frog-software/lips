@@ -2,12 +2,9 @@
   import { push } from "svelte-spa-router";
   import PocketBase from "pocketbase";
   import { PocketBase_URL } from "../utils/api/index";
-  import { get } from "svelte/store"; // 引入 get 函数来同步读取 Svelte 存储的值
-  import { currentUserEmail, currentchannelName } from "../store.js";
+  import { currentchannelName } from "../store.js";
   import { onMount } from "svelte";
   const pb = new PocketBase(PocketBase_URL);
-  let channelName_ = "";
-  let channelDescription = "";
   let isLoading = false;
   let records = "";
   let description = "";
@@ -33,31 +30,28 @@
   });
 
   async function SaveChanges() {
-    alert("ok")
     isLoading = true;
-  const userEmail = get(currentUserEmail); // 同步获取当前用户邮箱
+    if (channelId) {
+      // 如果channelId存在，则更新频道
+      const data = {
+        channelName: records,
+        channelDescription: description,
+      };
 
-  if (channelId) {
-    // 如果channelId存在，则更新频道
-    const data = {
-      channelName: records,
-      channelDescription: description,
-    };
-
-    try {
-      await pb.collection("channels").update(channelId, data);
-      alert("Channel updated successfully");
-      isLoading = false;
-      push("/main");
-    } catch (error) {
-      alert("ERROR: " + error.message);
+      try {
+        await pb.collection("channels").update(channelId, data);
+        alert("Channel updated successfully");
+        isLoading = false;
+        push("/main");
+      } catch (error) {
+        alert("ERROR: " + error.message);
+        isLoading = false;
+      }
+    } else {
+      // 如果channelId不存在，可以选择创建新频道或者显示错误消息
+      alert("Channel does not exist.");
       isLoading = false;
     }
-  } else {
-    // 如果channelId不存在，可以选择创建新频道或者显示错误消息
-    alert("Channel does not exist.");
-    isLoading = false;
-  }
   }
 </script>
 
@@ -115,7 +109,6 @@
     margin-bottom: 15px;
     height: 60%;
     width: 100%;
-    
   }
   .form1-control {
     display: flex;
@@ -141,8 +134,7 @@
     border-radius: 4px;
     box-sizing: border-box;
     position: absolute;
-  top: 0; /* 置顶显示 */
-    
+    top: 0; /* 置顶显示 */
   }
 
   .btn-submit {
