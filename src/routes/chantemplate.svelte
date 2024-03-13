@@ -71,6 +71,7 @@
 <style>
   .h2 {
     text-align: left;
+    color: #ffffff;
   }
   .record {
     width: 80%;
@@ -87,7 +88,7 @@
   .tag {
     width: 20%;
     padding: 10px;
-    background-color: #ffffff;
+    color: #ffffff;
   }
   .title {
     text-decoration: underline; /* 为标题添加下划线 */
