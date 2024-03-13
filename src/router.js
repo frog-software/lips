@@ -11,7 +11,6 @@ import SelectTags from "./routes/selectTags.svelte";
 import Mynotice from "./routes/mynotice.svelte";
 import Chantemplate from "./routes/chantemplate.svelte";
 import Checknotice from "./routes/checknotice.svelte";
-
 export default {
   "/": DoorPage,
   "/login": Login,
