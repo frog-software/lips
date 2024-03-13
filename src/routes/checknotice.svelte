@@ -56,10 +56,11 @@
     <button class="but" on:click={() => copy(record)}>+ todolist</button>
 
   </div>
-  {/each}
+{/each}
 
 
 <style>
+
   .record {
     width: auto;
     border: 1px solid #ccc;
@@ -85,5 +86,6 @@
   .but {
     color: black; /* 设置字体颜色为黑色 */
     border: 2px solid black; /* 2px宽度的实线边框，颜色为黑色 */
+
   }
 </style>
