@@ -51,3 +51,9 @@
   </form>
   <button on:click={handleRegister}> 注册 </button>
 {/if}
+
+<style>
+  h1 {
+    text-align: center;
+  }
+</style>

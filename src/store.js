@@ -6,3 +6,4 @@ export const currentchannelid = writable("");
 //共享当前的频道id
 export const currentnoticeid = writable("");
 //共享当前的通知id
+export const currentchannelName = writable("");
