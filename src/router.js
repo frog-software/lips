@@ -11,6 +11,7 @@ import SelectTags from "./routes/selectTags.svelte";
 import Mynotice from "./routes/mynotice.svelte";
 import Chantemplate from "./routes/chantemplate.svelte";
 import Checknotice from "./routes/checknotice.svelte";
+import UpdateChannel from "./routes/updateChannel.svelte";
 export default {
   "/": DoorPage,
   "/login": Login,
@@ -25,4 +26,5 @@ export default {
   "/mynotice": Mynotice,
   "/chantemplate": Chantemplate,
   "/checknotice": Checknotice,
+  "/updateChannel": UpdateChannel,
 };

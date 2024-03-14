@@ -47,6 +47,7 @@ h1 {
   text-align: left; /* 居中对齐 */
   margin-bottom: 50px; /* 下方空间 */
   margin-top: 300px;
+  font-size: 4vw; /* 字体大小为视口宽度的2% */
 }
 
 .highlighted {

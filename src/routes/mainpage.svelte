@@ -9,6 +9,7 @@
     currentUserEmail,
     currentchannelid,
     currentnoticeid,
+    currentchannelName,
   } from "../store.js";
 
   const pb = new PocketBase(PocketBase_URL);
@@ -23,10 +24,12 @@
   let selectedChannel = null;
 
   function editChannel(channelName) {
-    const channel = createdChannels.find((c) => c.channelName === channelName);
-    if (channel) {
-      selectedChannel = channel;
-    }
+    currentchannelName.set(channelName);
+    push("/updateChannel");
+    // const channel = createdChannels.find((c) => c.channelName === channelName);
+    // if (channel) {
+    //   selectedChannel = channel;
+    // }
   }
 
   function handleUpdate() {
