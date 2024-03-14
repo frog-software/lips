@@ -10,6 +10,7 @@
     currentchannelid,
     currentnoticeid,
     currentchannelName,
+    originChannelID,
   } from "../store.js";
 
   const pb = new PocketBase(PocketBase_URL);
@@ -147,6 +148,19 @@
       alert("fail to find");
     }
   }
+
+  async function updateOriginChannelId(cN) {
+    try {
+      const response_ = await pb.collection("channels").getFullList({
+        sort: "-created",
+        filter: `channelName="${cN}"`,
+      });
+      originChannelID.set(response_[0].id);
+      originChannelID.set(response_[0].id);
+    } catch {
+      alert("error");
+    }
+  }
   onMount(() => {
     checkUser();
     checkchan();
@@ -205,7 +219,10 @@
       {#if currentTab === "joined"}
         <div class="container01">
           {#each records as record}
-            <button class="button02" on:click={() => jumpnew(record.id)}
+            <button
+              class="button02"
+              on:click={() => jumpnew(record.id)}
+              on:click={() => updateOriginChannelId(record.channelname)}
               >#{record.channelname}</button
             >
           {/each}
@@ -215,7 +232,11 @@
         <div class="container01">
           {#each createdChannels as channel}
             <div class="channel-row">
-              <button class="button02" on:click={() => jumpnew(channel.id)}>
+              <button
+                class="button02"
+                on:click={() => jumpnew(channel.id)}
+                on:click={() => updateOriginChannelId(channel.channelname)}
+              >
                 #{channel.channelName}
               </button>
               <button

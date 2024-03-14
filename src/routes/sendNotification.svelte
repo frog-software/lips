@@ -2,7 +2,7 @@
   import PocketBase from "pocketbase";
   import { push } from "svelte-spa-router";
   import { PocketBase_URL } from "../utils/api/index";
-  import { currentUserEmail, currentchannelid } from "../store.js";
+  import { currentUserEmail, originChannelID } from "../store.js";
   import { onMount } from "svelte";
   let tittle = "";
   let body = "";
@@ -31,7 +31,7 @@
   async function post() {
     //异步函数的定义
     const userEmail = $currentUserEmail;
-    const channelid = $currentchannelid;
+    const channelid = $originChannelID;
     const data = {
       tittle: tittle,
       body: body,
