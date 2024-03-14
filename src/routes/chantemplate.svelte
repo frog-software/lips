@@ -37,7 +37,7 @@
     push("/checknotice");
   }
 
-  function origin(tagname){
+  function origin(tagname) {
     selectedtag.set(tagname);
   }
 </script>
@@ -67,7 +67,7 @@
   <div class="right">
     <h2 class="h2">Tags</h2>
     {#each tags as tag}
-      <a href="#/jumptag" class="tag" on:click={()=> origin(tag)}>{tag}</a>
+      <a href="#/jumptag" class="tag" on:click={() => origin(tag)}>{tag}</a>
     {/each}
   </div>
 </div>
@@ -83,7 +83,7 @@
     background-color: #ffffff;
     text-align: left;
   }
-  .record:hover{
+  .record:hover {
     color: #ffffff;
     opacity: 1;
     background-color: #e9ebeb;
