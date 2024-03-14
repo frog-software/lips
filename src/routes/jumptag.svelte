@@ -1,4 +1,4 @@
-<!-- 频道模板 可发送通知 显示频道已有的通知-->
+<!-- 点击标签后跳转的页面-->
 <script>
   import PocketBase from "pocketbase";
   import { PocketBase_URL } from "../utils/api/index";
@@ -12,18 +12,23 @@
   async function noticedisplay() {
     try {
       const channel = $currentchannelid;
+      const selected = $selectedtag;
       const responses = await pb.collection("notices").getFullList({
         sort: "-created",
         filter: `channelid="${channel}"`,
       });
       const names = responses.map((response) => response.tag);
       tags = [...new Set(names)];
-      records = responses;
+      if (selected) {
+        // 确保selected有值
+        records = responses.filter((response) => response.tag === selected);
+      } else {
+        records = responses;
+      }
     } catch (error) {
-      alert("fail to find");
+      alert("fail to find notices");
     }
   }
-
   onMount(() => {
     noticedisplay();
   });
@@ -39,6 +44,7 @@
 
   function origin(tagname) {
     selectedtag.set(tagname);
+    noticedisplay();
   }
 </script>
 
