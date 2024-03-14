@@ -7,3 +7,6 @@ export const currentchannelid = writable("");
 export const currentnoticeid = writable("");
 //共享当前的通知id
 export const currentchannelName = writable("");
+//共享当前的频道名
+export const selectedtag = writable("");
+//记录选择的tag
