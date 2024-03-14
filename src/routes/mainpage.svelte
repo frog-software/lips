@@ -148,16 +148,16 @@
       alert("fail to find");
     }
   }
-  
-  async function updateOriginChannelId(cN){
-    try{
+
+  async function updateOriginChannelId(cN) {
+    try {
       const response_ = await pb.collection("channels").getFullList({
         sort: "-created",
         filter: `channelName="${cN}"`,
       });
       originChannelID.set(response_[0].id);
       originChannelID.set(response_[0].id);
-    }catch{
+    } catch {
       alert("error");
     }
   }
@@ -219,8 +219,10 @@
       {#if currentTab === "joined"}
         <div class="container01">
           {#each records as record}
-            <button class="button02" on:click={() => jumpnew(record.id)}
-               on:click={() => updateOriginChannelId(record.channelname)}
+            <button
+              class="button02"
+              on:click={() => jumpnew(record.id)}
+              on:click={() => updateOriginChannelId(record.channelname)}
               >#{record.channelname}</button
             >
           {/each}
@@ -230,8 +232,11 @@
         <div class="container01">
           {#each createdChannels as channel}
             <div class="channel-row">
-              <button class="button02" on:click={() => jumpnew(channel.id)}
-                on:click={() => updateOriginChannelId(channel.channelname)}>
+              <button
+                class="button02"
+                on:click={() => jumpnew(channel.id)}
+                on:click={() => updateOriginChannelId(channel.channelname)}
+              >
                 #{channel.channelName}
               </button>
               <button

@@ -87,17 +87,16 @@
     }
   }
 
-  async function updateOriginChannelId(cN){
-    try{
+  async function updateOriginChannelId(cN) {
+    try {
       const response_ = await pb.collection("channels").getFullList({
         sort: "-created",
         filter: `channelName="${cN}"`,
       });
       originChannelID.set(response_[0].id);
       originChannelID.set(response_[0].id);
-
-    }catch{
-        alert("error");
+    } catch {
+      alert("error");
     }
   }
   // 导航到指定频道详情页的函数
@@ -107,7 +106,6 @@
 
   // 应用防抖函数到搜索频道函数，以优化性能
   const debouncedSearchChannel = debounce(searchChannel, 500);
-
 </script>
 
 <h1>查找频道</h1>
