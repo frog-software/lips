@@ -2,7 +2,7 @@
   import PocketBase from "pocketbase";
   import { push } from "svelte-spa-router";
   import { PocketBase_URL } from "../utils/api/index";
-  import { currentUserEmail } from "../store.js";
+  import { currentUserEmail, originChannelID } from "../store.js";
 
   const pb = new PocketBase(PocketBase_URL);
 
@@ -87,6 +87,18 @@
     }
   }
 
+  async function updateOriginChannelId(cN) {
+    try {
+      const response_ = await pb.collection("channels").getFullList({
+        sort: "-created",
+        filter: `channelName="${cN}"`,
+      });
+      originChannelID.set(response_[0].id);
+      originChannelID.set(response_[0].id);
+    } catch {
+      alert("error");
+    }
+  }
   // 导航到指定频道详情页的函数
   function navigateToChannelDetail(channelName) {
     push("/" + channelName);
@@ -129,7 +141,8 @@
           {/if}
           <button
             class="detail-btn"
-            on:click={() => navigateToChannelDetail(channel.channelName)}
+            on:click={() => navigateToChannelDetail("chantemplate")}
+            on:click={() => updateOriginChannelId(channel.channelName)}
             >访问频道</button
           >
         </div>

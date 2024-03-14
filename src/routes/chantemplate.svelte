@@ -2,7 +2,7 @@
 <script>
   import PocketBase from "pocketbase";
   import { PocketBase_URL } from "../utils/api/index";
-  import { currentchannelid, currentnoticeid, selectedtag } from "../store.js";
+  import { currentnoticeid, selectedtag, originChannelID } from "../store.js";
   import { push } from "svelte-spa-router";
   import { onMount } from "svelte";
 
@@ -11,7 +11,7 @@
   let tags = [];
   async function noticedisplay() {
     try {
-      const channel = $currentchannelid;
+      const channel = $originChannelID;
       const responses = await pb.collection("notices").getFullList({
         sort: "-created",
         filter: `channelid="${channel}"`,
