@@ -10,3 +10,5 @@ export const currentchannelName = writable("");
 //共享当前的频道名
 export const selectedtag = writable("");
 //记录选择的tag
+export const originChannelID= writable("");
+//channels的id
