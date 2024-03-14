@@ -20,12 +20,12 @@
 </video>
 
 <div>
-  <h1 class='mt-300 mb-50'>
+  <h1 class="mt-300 mb-50">
     <span class="highlighted"> lips </span> -A lightweight information portal system
   </h1>
-  <button class='btn' on:click={handleLogin}> About us </button>
+  <button class="btn" on:click={handleLogin}> About us </button>
   {#if currentpath == "/"}
-    <button class='btn' on:click={handleLogin}> Log in </button>
+    <button class="btn" on:click={handleLogin}> Log in </button>
   {/if}
 </div>
 
