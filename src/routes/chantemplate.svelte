@@ -2,7 +2,7 @@
 <script>
   import PocketBase from "pocketbase";
   import { PocketBase_URL } from "../utils/api/index";
-  import { currentchannelid, currentnoticeid } from "../store.js";
+  import { currentchannelid, currentnoticeid, selectedtag } from "../store.js";
   import { push } from "svelte-spa-router";
   import { onMount } from "svelte";
 
@@ -36,6 +36,10 @@
     currentnoticeid.set(id);
     push("/checknotice");
   }
+
+  function origin(tagname){
+    selectedtag.set(tagname);
+  }
 </script>
 
 <button on:click={send}>发送通知</button>
@@ -63,7 +67,7 @@
   <div class="right">
     <h2 class="h2">Tags</h2>
     {#each tags as tag}
-      <div class="tag">{tag}</div>
+      <a href="#/jumptag" class="tag" on:click={()=> origin(tag)}>{tag}</a>
     {/each}
   </div>
 </div>
@@ -79,8 +83,7 @@
     background-color: #ffffff;
     text-align: left;
   }
-  .record:hover,
-  .tag:hover {
+  .record:hover{
     color: #ffffff;
     opacity: 1;
     background-color: #e9ebeb;
@@ -88,7 +91,7 @@
   .tag {
     width: 20%;
     padding: 10px;
-    color: #ffffff;
+    /* color: #ffffff; */
   }
   .title {
     text-decoration: underline; /* 为标题添加下划线 */
@@ -100,6 +103,7 @@
 
   .content {
     font-size: 16px;
+    color: black;
   }
 
   .author {
