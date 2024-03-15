@@ -26,6 +26,9 @@
 
   onMount(() => {
     noticedisplay();
+    // const params = new URLSearchParams(window.location.search);
+    // alert(params);
+    // value = params.get('value');
   });
 
   function send() {

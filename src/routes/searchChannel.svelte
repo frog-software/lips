@@ -72,12 +72,13 @@
   }
 
   // 用户加入频道并导航到频道详情页的异步函数
-  async function joinChannel(channelname) {
+  async function joinChannel(channelname, channelid) {
     try {
       const userEmail = $currentUserEmail;
       await pb.collection("users_channels").create({
         useremail: userEmail,
         channelname: channelname,
+        originid: channelid,
       });
       alert("已成功加入频道");
       navigateToChannelDetail("main");
@@ -87,19 +88,22 @@
     }
   }
 
-  async function updateOriginChannelId(cN) {
-    try {
-      const response_ = await pb.collection("channels").getFullList({
-        sort: "-created",
-        filter: `channelName="${cN}"`,
-      });
-      originChannelID.set(response_[0].id);
-      originChannelID.set(response_[0].id);
-    } catch {
-      alert("error");
-    }
+  function updateOriginChannelId(id) {
+    originChannelID.set(id);
+    // try {
+    //   const response_ = await pb.collection("channels").getFullList({
+    //     sort: "-created",
+    //     filter: `channelName="${cN}"`,
+    //   });
+    //   // originChannelID.set(response_[0].id);
+    //   // originChannelID.set(response_[0].id);
+    //   const value =response_[0].id;
+    //    window.location.href = `./chantemplate?value=${encodeURIComponent(value)}`;
+    // } catch {
+    //   alert("error");
+    // }
   }
-  // 导航到指定频道详情页的函数
+  //导航到指定频道详情页的函数
   function navigateToChannelDetail(channelName) {
     push("/" + channelName);
   }
@@ -136,14 +140,14 @@
           {:else}
             <button
               class="join-btn"
-              on:click={() => joinChannel(channel.channelName)}>加入频道</button
+              on:click={() => joinChannel(channel.channelName, channel.id)}
+              >加入频道</button
             >
           {/if}
           <button
             class="detail-btn"
             on:click={() => navigateToChannelDetail("chantemplate")}
-            on:click={() => updateOriginChannelId(channel.channelName)}
-            >访问频道</button
+            on:click={() => updateOriginChannelId(channel.id)}>访问频道</button
           >
         </div>
       </li>

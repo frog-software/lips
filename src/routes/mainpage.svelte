@@ -131,10 +131,23 @@
     showModal4 = !showModal4;
   }
 
-  function jumpnew(id) {
+  function jumpnew(id, origin) {
     currentchannelid.set(id);
+    originChannelID.set(origin);
     push("/chantemplate");
   }
+  // async function test(id,cN){
+  //   currentchannelid.set(id);
+  //   alert($currentchannelid);
+  //   push("/chantemplate");
+  //     const response_ = await pb.collection("channels").getFullList({
+  //       sort: "-created",
+  //       filter: `channelName="${cN}"`,
+  //     });
+  //     originChannelID.set(response_[0].id);
+  //     originChannelID.set(response_[0].id);
+
+  // }
 
   async function checkUser() {
     try {
@@ -148,19 +161,27 @@
       alert("fail to find");
     }
   }
+  //   function sleep(ms) {
+  //   return new Promise(resolve => setTimeout(resolve, ms));
+  // }
 
-  async function updateOriginChannelId(cN) {
-    try {
-      const response_ = await pb.collection("channels").getFullList({
-        sort: "-created",
-        filter: `channelName="${cN}"`,
-      });
-      originChannelID.set(response_[0].id);
-      originChannelID.set(response_[0].id);
-    } catch {
-      alert("error");
-    }
-  }
+  // async function updateOriginChannelId(cN) {
+  //   try {
+  //     const response_ = await pb.collection("channels").getFullList({
+  //       sort: "-created",
+  //       filter: `channelName="${cN}"`,
+  //     });
+  //     originChannelID.set(response_[0].id);
+
+  //       originChannelID.set(response_[0].id);
+
+  //     alert($originChannelID);
+
+  //   } catch {
+  //     alert("error");
+  //   }
+  // }
+
   onMount(() => {
     checkUser();
     checkchan();
@@ -309,8 +330,7 @@
           {#each records as record}
             <button
               class="button02"
-              on:click={() => jumpnew(record.id)}
-              on:click={() => updateOriginChannelId(record.channelname)}
+              on:click={() => jumpnew(record.id, record.originid)}
               >#{record.channelname}</button
             >
           {/each}
@@ -322,8 +342,7 @@
             <div class="channel-row">
               <button
                 class="button02"
-                on:click={() => jumpnew(channel.id)}
-                on:click={() => updateOriginChannelId(channel.channelname)}
+                on:click={() => jumpnew(channel.id, channel.originid)}
               >
                 #{channel.channelName}
               </button>
