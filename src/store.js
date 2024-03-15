@@ -12,3 +12,4 @@ export const selectedtag = writable("");
 //记录选择的tag
 export const originChannelID = writable("");
 //channels的id
+export const isJoinedTodo = writable("");
