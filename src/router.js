@@ -13,6 +13,7 @@ import Chantemplate from "./routes/chantemplate.svelte";
 import Checknotice from "./routes/checknotice.svelte";
 import UpdateChannel from "./routes/updateChannel.svelte";
 import Jumptag from "./routes/jumptag.svelte";
+import InfoPage from "./routes/infoPage.svelte";
 export default {
   "/": DoorPage,
   "/login": Login,
@@ -29,4 +30,5 @@ export default {
   "/checknotice": Checknotice,
   "/updateChannel": UpdateChannel,
   "/jumptag": Jumptag,
+  "/infoPage": InfoPage,
 };

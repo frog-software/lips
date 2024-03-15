@@ -2,7 +2,13 @@
 <script>
   import PocketBase from "pocketbase";
   import { PocketBase_URL } from "../utils/api/index";
-  import { currentnoticeid, selectedtag, originChannelID } from "../store.js";
+  import {
+    currentnoticeid,
+    selectedtag,
+    originChannelID,
+    isJoinedTodo,
+    currentUserEmail,
+  } from "../store.js";
   import { push } from "svelte-spa-router";
   import { onMount } from "svelte";
 
@@ -35,8 +41,22 @@
     push("/postnotice");
   }
 
-  function check(id) {
+  async function check(id, title) {
     currentnoticeid.set(id);
+    const uEmail = $currentUserEmail;
+    const response = await pb.collection("todolist").getFullList({
+      sort: "-created",
+      filter: `useremail="${uEmail}"`,
+    });
+
+    for (const item of response) {
+      if (item.tittle == title) {
+        isJoinedTodo.set("find");
+        break;
+      } else {
+        isJoinedTodo.set("noFind");
+      }
+    }
     push("/checknotice");
   }
 
@@ -54,7 +74,7 @@
         class="record"
         role="button"
         tabindex="0"
-        on:click={() => check(record.id)}
+        on:click={() => check(record.id, record.tittle)}
         on:keypress
       >
         <a href="#/checknotice" class="title">{record.tittle}</a>

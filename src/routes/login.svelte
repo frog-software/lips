@@ -19,6 +19,7 @@
         const userEmail = $currentUserEmail;
         console.log("当前用户的电子邮件:", userEmail);
         push("/main");
+        //push("/infoPage");
       }
     } catch (error) {
       alert("用戶名或密碼錯誤");
