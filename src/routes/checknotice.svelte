@@ -4,7 +4,7 @@
   import { currentUserEmail, currentnoticeid, isJoinedTodo } from "../store.js";
   import PocketBase from "pocketbase";
   import { PocketBase_URL } from "../utils/api/index";
-  import { onMount} from "svelte";
+  import { onMount } from "svelte";
   import { writable } from "svelte/store";
 
   const pb = new PocketBase(PocketBase_URL);
