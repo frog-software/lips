@@ -13,3 +13,5 @@ export const selectedtag = writable("");
 export const originChannelID = writable("");
 //channels的id
 export const isJoinedTodo = writable("");
+
+export const username = writable("");
