@@ -1,20 +1,23 @@
 <script>
   import PocketBase from "pocketbase";
   import { PocketBase_URL } from "../utils/api/index";
-  import { currentUserEmail } from "../store.js";
-  //import { push } from "svelte-spa-router";
+  import { currentUserEmail, originChannelID } from "../store.js";
+  import { push } from "svelte-spa-router";
   import { onMount } from "svelte";
 
   const pb = new PocketBase(PocketBase_URL);
   let isFind = false;
   let myChannel = [];
+  let recChannel = [];
   async function checkIsJoined() {
     try {
       const userEmail = $currentUserEmail;
-      const response = await pb.collection("channels").getFullList({
+      const response = await pb.collection("users_channels").getFullList({
         sort: "-created",
         filter: `useremail="${userEmail}"`,
       });
+      const records = await pb.collection("channels").getFullList();
+      recChannel = records;
       myChannel = response;
       if (myChannel != null) {
         isFind = true;
@@ -22,6 +25,11 @@
     } catch (error) {
       alert("fail to find");
     }
+  }
+  function jumpnew(origin) {
+    //currentchannelid.set(id);
+    originChannelID.set(origin);
+    push("/chantemplate");
   }
 
   onMount(() => {
@@ -35,7 +43,9 @@
       <div class="blockTitle">My channels</div>
       {#if isFind}
         {#each myChannel.slice(0, 5) as mychannel}
-          <div class="channel">{mychannel.channelName}</div>
+          <button class="channel" on:click={() => jumpnew(mychannel.originid)}
+            >{mychannel.channelname}</button
+          >
         {/each}
       {:else}
         <p style="color:black">您还没有加入频道，快去加入一个吧!</p>
@@ -43,6 +53,11 @@
     </div>
     <div class="bottom">
       <div class="blockTitle">Recommended channels</div>
+      {#each recChannel.slice(0, 5) as mychannel}
+        <button class="channel" on:click={() => jumpnew(mychannel.id)}
+          >{mychannel.channelName}</button
+        >
+      {/each}
     </div>
   </div>
 
@@ -113,6 +128,7 @@
     padding: 10px; /* 内边距 */
   }
   .channel {
+    display: block;
     color: black; /* 设置文本颜色 */
     margin-bottom: 10px; /* 设置记录之间的间隔 */
     font-size: large;
