@@ -5,6 +5,7 @@
   import { onMount } from "svelte";
   import Modal from "./Modal.svelte";
   import EditChannelModal from "./EditChannelModal.svelte";
+  import Navbar from "../components/Navbar.svelte";
   import {
     currentUserEmail,
     currentchannelid,
@@ -12,10 +13,10 @@
     currentchannelName,
     originChannelID,
     isJoinedTodo,
+    username,
   } from "../store.js";
-
+  
   const pb = new PocketBase(PocketBase_URL);
-  let username = "";
   let records = [];
   let createdChannels = []; // 存储用户创建的频道列表
   let currentTab = "joined"; // 控制显示'joined'或'created'列表
@@ -174,7 +175,6 @@
   //     });
   //     originChannelID.set(response_[0].id);
   //     originChannelID.set(response_[0].id);
-
   // }
 
   async function checkUser() {
@@ -184,11 +184,13 @@
         sort: "-created",
         filter: `email="${userEmail}"`,
       });
-      username = response_[0].username;
+      username.set(response_[0].username)
     } catch (error) {
       alert("fail to find");
     }
   }
+
+  
   //   function sleep(ms) {
   //   return new Promise(resolve => setTimeout(resolve, ms));
   // }
@@ -244,92 +246,14 @@
   function JumpNewPage(address) {
     push("/" + address);
   }
-
-  let isOpen = false;
-
-  function toggleDrawer() {
-    isOpen = !isOpen;
-  }
 </script>
 
-<div class="navbar bg-base-100 rounded-3xl shadow-xl topnavbar">
-  <div class="flex-none">
-    <div class="drawer">
-      <input
-        id="my-drawer"
-        type="checkbox"
-        bind:checked={isOpen}
-        class="drawer-toggle"
-      />
-      <div class="drawer-content">
-        <!-- Page content here -->
-        <button on:click={toggleDrawer} class="btn btn-square btn-ghost">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            class="inline-block w-5 h-5 stroke-current"
-            ><path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M4 6h16M4 12h16M4 18h16"
-            ></path></svg
-          >
-        </button>
-      </div>
-      <div class="drawer-side">
-        <label for="my-drawer" aria-label="close sidebar" class="drawer-overlay"
-        ></label>
-        <ul class="menu p-4 w-80 min-h-full bg-base-200 text-base-content">
-          <!-- Sidebar content here -->
-          <li><a href="/#">Sidebar Item 1</a></li>
-          <li><a href="/#">Sidebar Item 2</a></li>
-        </ul>
-      </div>
-    </div>
-  </div>
-  <div class="flex-1">
-    <a href="/#/login" class="btn btn-ghost text-xl logo">lips</a>
-  </div>
-  <div class="flex-none">
-    <div class="dropdown dropdown-end">
-      <div
-        class="mt-3 z-[1] card card-compact dropdown-content w-52 bg-base-100 shadow"
-      >
-        <div class="card-body">
-          <span class="font-bold text-lg">8 Items</span>
-          <span class="text-info">Subtotal: $999</span>
-          <div class="card-actions">
-            <button class="btn btn-primary btn-block">View cart</button>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="text-2xl mr-2">{username}</div>
-    <div class="dropdown dropdown-end">
-      <div tabindex="0" role="button" class="btn btn-ghost btn-circle avatar">
-        <div class="w-10 rounded-full">
-          <img alt="Tailwind CSS Navbar component" src="userPicture.jpeg" />
-        </div>
-      </div>
-      <ul
-        class="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-52"
-      >
-        <li><a class="justify-between" href="/#/profile">Profile</a></li>
-        <li><a href="/#/setting">Settings</a></li>
-        <li><a href="/#/login">Logout</a></li>
-      </ul>
-    </div>
-  </div>
-</div>
-
-<div class="navbar"></div>
+<Navbar/>
 
 <body>
   <div class="flex flex-col w-2/5 items-center h-dvh space-y-10 py-10">
     <img {src} alt="user" class="button-img" />
-    <p class="text-7xl text-black">{username}</p>
+    <p class="text-7xl text-black">{$username}</p>
     <button class="btn" on:click={() => JumpNewPage("login")}> 登出 </button>
   </div>
 
