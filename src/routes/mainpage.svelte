@@ -38,6 +38,24 @@
     checkchan();
     selectedChannel = null; // 重置selectedChannel，关闭编辑模态框
   }
+  async function deletetodo(todoid) {
+    if (!confirm("确定要从待办事项中删除这则通知吗？")) {
+      return;
+    }
+    try {
+      const todos = await pb.collection("todolist").getFullList({
+        filter: `id="${todoid}"`,
+      });
+      for (const todo of todos) {
+        await pb.collection("todolist").delete(todo.id);
+      }
+      alert("删除成功。");
+      checkTodolist();
+    } catch (error) {
+      console.error("删除失败：", error);
+      alert("删除失败。");
+    }
+  }
   async function deletenotice(noticeid) {
     if (!confirm("确定要删除这则通知吗？")) {
       return;
@@ -440,6 +458,9 @@
             on:click={() => jumptodo(todothing.tittle)}
             on:keypress
           >
+            <button class="chacha" on:click={() => deletetodo(todothing.id)}
+              >x</button
+            >
             <div class="title">{todothing.tittle}</div>
             <div class="content">#{todothing.tag}</div>
             <div class="author">
@@ -600,10 +621,19 @@
     background-color: #5c5c5c; /* 修改按钮悬停时的背景颜色 */
   }
 
+  .chacha:hover,
   .delete-btn:hover {
+    color: white;
     background-color: #a54444; /* 删除按钮悬停时的背景颜色 */
   }
 
+  .chacha {
+    background-color: white;
+    width: 20px;
+    color: #a3a1a1;
+    float: right;
+    text-align: center;
+  }
   .channel-row {
     display: flex;
     align-items: center;
