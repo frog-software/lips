@@ -1,14 +1,20 @@
 <!-- 显示通知具体内容 -->
 
 <script>
-  import { currentUserEmail, currentnoticeid } from "../store.js";
+  import { currentUserEmail, currentnoticeid, isJoinedTodo } from "../store.js";
   import PocketBase from "pocketbase";
   import { PocketBase_URL } from "../utils/api/index";
   import { onMount } from "svelte";
+  import { writable } from "svelte/store";
 
   const pb = new PocketBase(PocketBase_URL);
   let records = [];
+  let ifJoined = writable(false);
   async function noticedisplay() {
+    if ($isJoinedTodo == "find") {
+      ifJoined.set(true);
+    }
+    //alert("第一个函数被调用")
     try {
       const createid = $currentnoticeid;
       const response = await pb.collection("notices").getFullList({
@@ -21,6 +27,7 @@
     }
   }
   async function copy(check) {
+    ifJoined.set(true);
     try {
       const userEmail = $currentUserEmail;
       const newRecord = {
@@ -52,7 +59,11 @@
       {record.year}.{record.month}.{record.day}/#{record.tag}/from:{record.username}
     </div>
     <div>{record.body}</div>
-    <button class="but" on:click={() => copy(record)}>+ todolist</button>
+    {#if $ifJoined == false}
+      <button class="but" on:click={() => copy(record)}>+ todolist</button>
+    {:else}
+      <button class="but">已加入todolist</button>
+    {/if}
   </div>
 {/each}
 

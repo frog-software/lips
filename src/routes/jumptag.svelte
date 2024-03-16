@@ -1,14 +1,8 @@
-<!-- 频道模板 可发送通知 显示频道已有的通知-->
+<!-- 点击标签后跳转的页面-->
 <script>
   import PocketBase from "pocketbase";
   import { PocketBase_URL } from "../utils/api/index";
-  import {
-    currentnoticeid,
-    selectedtag,
-    originChannelID,
-    isJoinedTodo,
-    currentUserEmail,
-  } from "../store.js";
+  import { currentchannelid, currentnoticeid, selectedtag } from "../store.js";
   import { push } from "svelte-spa-router";
   import { onMount } from "svelte";
 
@@ -17,51 +11,40 @@
   let tags = [];
   async function noticedisplay() {
     try {
-      const channel = $originChannelID;
+      const channel = $currentchannelid;
+      const selected = $selectedtag;
       const responses = await pb.collection("notices").getFullList({
         sort: "-created",
         filter: `channelid="${channel}"`,
       });
       const names = responses.map((response) => response.tag);
       tags = [...new Set(names)];
-      records = responses;
+      if (selected) {
+        // 确保selected有值
+        records = responses.filter((response) => response.tag === selected);
+      } else {
+        records = responses;
+      }
     } catch (error) {
-      alert("fail to find");
+      alert("fail to find notices");
     }
   }
-
   onMount(() => {
     noticedisplay();
-    // const params = new URLSearchParams(window.location.search);
-    // alert(params);
-    // value = params.get('value');
   });
 
   function send() {
     push("/postnotice");
   }
 
-  async function check(id, title) {
+  function check(id) {
     currentnoticeid.set(id);
-    const uEmail = $currentUserEmail;
-    const response = await pb.collection("todolist").getFullList({
-      sort: "-created",
-      filter: `useremail="${uEmail}"`,
-    });
-
-    for (const item of response) {
-      if (item.tittle == title) {
-        isJoinedTodo.set("find");
-        break;
-      } else {
-        isJoinedTodo.set("noFind");
-      }
-    }
     push("/checknotice");
   }
 
   function origin(tagname) {
     selectedtag.set(tagname);
+    noticedisplay();
   }
 </script>
 
@@ -74,7 +57,7 @@
         class="record"
         role="button"
         tabindex="0"
-        on:click={() => check(record.id, record.tittle)}
+        on:click={() => check(record.id)}
         on:keypress
       >
         <a href="#/checknotice" class="title">{record.tittle}</a>

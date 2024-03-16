@@ -10,6 +10,8 @@
     currentchannelid,
     currentnoticeid,
     currentchannelName,
+    originChannelID,
+    isJoinedTodo,
   } from "../store.js";
 
   const pb = new PocketBase(PocketBase_URL);
@@ -111,9 +113,36 @@
       alert("fail to find");
     }
   }
+  let todo = [];
+  async function checkTodolist() {
+    try {
+      const userEmail = $currentUserEmail;
+      const response = await pb.collection("todolist").getFullList({
+        sort: "-created",
+        filter: `useremail="${userEmail}"`,
+      });
+      todo = response;
+    } catch (error) {
+      alert("fail to find");
+    }
+  }
 
-  function check(id) {
+  async function check(id, title) {
     currentnoticeid.set(id);
+    const uEmail = $currentUserEmail;
+    const response = await pb.collection("todolist").getFullList({
+      sort: "-created",
+      filter: `useremail="${uEmail}"`,
+    });
+
+    for (const item of response) {
+      if (item.tittle == title) {
+        isJoinedTodo.set("find");
+        break;
+      } else {
+        isJoinedTodo.set("noFind");
+      }
+    }
     push("/checknotice");
   }
 
@@ -130,10 +159,23 @@
     showModal4 = !showModal4;
   }
 
-  function jumpnew(id) {
+  function jumpnew(id, origin) {
     currentchannelid.set(id);
+    originChannelID.set(origin);
     push("/chantemplate");
   }
+  // async function test(id,cN){
+  //   currentchannelid.set(id);
+  //   alert($currentchannelid);
+  //   push("/chantemplate");
+  //     const response_ = await pb.collection("channels").getFullList({
+  //       sort: "-created",
+  //       filter: `channelName="${cN}"`,
+  //     });
+  //     originChannelID.set(response_[0].id);
+  //     originChannelID.set(response_[0].id);
+
+  // }
 
   async function checkUser() {
     try {
@@ -147,11 +189,55 @@
       alert("fail to find");
     }
   }
+  //   function sleep(ms) {
+  //   return new Promise(resolve => setTimeout(resolve, ms));
+  // }
+
+  // async function updateOriginChannelId(cN) {
+  //   try {
+  //     const response_ = await pb.collection("channels").getFullList({
+  //       sort: "-created",
+  //       filter: `channelName="${cN}"`,
+  //     });
+  //     originChannelID.set(response_[0].id);
+
+  //       originChannelID.set(response_[0].id);
+
+  //     alert($originChannelID);
+
+  //   } catch {
+  //     alert("error");
+  //   }
+  // }
+  async function jumptodo(title) {
+    const response_ = await pb.collection("notices").getFullList({
+      sort: "-created",
+      filter: `tittle="${title}"`,
+    });
+
+    currentnoticeid.set(response_[0].id);
+    const uEmail = $currentUserEmail;
+    const response = await pb.collection("todolist").getFullList({
+      sort: "-created",
+      filter: `useremail="${uEmail}"`,
+    });
+
+    for (const item of response) {
+      if (item.tittle == title) {
+        isJoinedTodo.set("find");
+        break;
+      } else {
+        isJoinedTodo.set("noFind");
+      }
+    }
+    push("/checknotice");
+  }
   onMount(() => {
     checkUser();
     checkchan();
     checkNotice();
     fetchCreatedChannels();
+    checkTodolist();
   });
 
   let src = "userPicture.jpeg";
@@ -293,7 +379,9 @@
       {#if currentTab === "joined"}
         <div class="container01">
           {#each records as record}
-            <button class="button02" on:click={() => jumpnew(record.id)}
+            <button
+              class="button02"
+              on:click={() => jumpnew(record.id, record.originid)}
               >#{record.channelname}</button
             >
           {/each}
@@ -303,7 +391,10 @@
         <div class="container01">
           {#each createdChannels as channel}
             <div class="channel-row">
-              <button class="button02" on:click={() => jumpnew(channel.id)}>
+              <button
+                class="button02"
+                on:click={() => jumpnew(channel.id, channel.originid)}
+              >
                 #{channel.channelName}
               </button>
               <button
@@ -344,7 +435,7 @@
             class="record"
             role="button"
             tabindex="0"
-            on:click={() => check(record.id)}
+            on:click={() => check(record.id, record.tittle)}
             on:keypress
           >
             <div class="title">{record.tittle}</div>
@@ -360,7 +451,23 @@
     >
     <Modal isOpen={showModal4} close={toggleModal4}>
       <h2 style="color: black;">待办事项</h2>
-      <div class="container"></div>
+      <div class="container">
+        {#each todo as todothing}
+          <div
+            class="record"
+            role="button"
+            tabindex="0"
+            on:click={() => jumptodo(todothing.tittle)}
+            on:keypress
+          >
+            <div class="title">{todothing.tittle}</div>
+            <div class="content">#{todothing.tag}</div>
+            <div class="author">
+              from:{todothing.year}/{todothing.month}/{todothing.day}
+            </div>
+          </div>
+        {/each}
+      </div>
     </Modal>
     <!-- <button
       class="button-present"
