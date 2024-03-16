@@ -1,10 +1,7 @@
 <script>
   import PocketBase from "pocketbase";
   import { PocketBase_URL } from "../utils/api/index";
-  import {
-    currentUserEmail,
-    originChannelID,
-  } from "../store.js";
+  import { currentUserEmail, originChannelID } from "../store.js";
   import { push } from "svelte-spa-router";
   import { onMount } from "svelte";
 
