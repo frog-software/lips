@@ -5,15 +5,18 @@
   import { onMount } from "svelte";
   import Modal from "./Modal.svelte";
   import EditChannelModal from "./EditChannelModal.svelte";
+  import Navbar from "../components/Navbar.svelte";
   import {
     currentUserEmail,
     currentchannelid,
     currentnoticeid,
     currentchannelName,
+    originChannelID,
+    isJoinedTodo,
+    username,
   } from "../store.js";
 
   const pb = new PocketBase(PocketBase_URL);
-  let username = "";
   let records = [];
   let createdChannels = []; // 存储用户创建的频道列表
   let currentTab = "joined"; // 控制显示'joined'或'created'列表
@@ -26,23 +29,56 @@
   function editChannel(channelName) {
     currentchannelName.set(channelName);
     push("/updateChannel");
-    // const channel = createdChannels.find((c) => c.channelName === channelName);
-    // if (channel) {
-    //   selectedChannel = channel;
-    // }
   }
-
+  function editnotice(noticeid) {
+    currentnoticeid.set(noticeid);
+    push("/updatenotice");
+  }
   function handleUpdate() {
     fetchCreatedChannels(); // 重新获取频道列表
     checkchan();
     selectedChannel = null; // 重置selectedChannel，关闭编辑模态框
   }
-
+  async function deletetodo(todoid) {
+    if (!confirm("确定要从待办事项中删除这则通知吗？")) {
+      return;
+    }
+    try {
+      const todos = await pb.collection("todolist").getFullList({
+        filter: `id="${todoid}"`,
+      });
+      for (const todo of todos) {
+        await pb.collection("todolist").delete(todo.id);
+      }
+      alert("删除成功。");
+      checkTodolist();
+    } catch (error) {
+      console.error("删除失败：", error);
+      alert("删除失败。");
+    }
+  }
+  async function deletenotice(noticeid) {
+    if (!confirm("确定要删除这则通知吗？")) {
+      return;
+    }
+    try {
+      const notices = await pb.collection("notices").getFullList({
+        filter: `id="${noticeid}"`,
+      });
+      for (const notice of notices) {
+        await pb.collection("notices").delete(notice.id);
+      }
+      alert("频道及相关数据删除成功。");
+      checkNotice();
+    } catch (error) {
+      console.error("删除频道及相关数据失败：", error);
+      alert("删除频道及相关数据失败。");
+    }
+  }
   async function deleteChannel(channelName) {
     if (!confirm("确定要删除这个频道吗？")) {
       return; // 用户取消操作，直接返回
     }
-
     try {
       // 查找channels集合中的指定频道
       const channels = await pb.collection("channels").getFullList({
@@ -111,9 +147,36 @@
       alert("fail to find");
     }
   }
+  let todo = [];
+  async function checkTodolist() {
+    try {
+      const userEmail = $currentUserEmail;
+      const response = await pb.collection("todolist").getFullList({
+        sort: "-created",
+        filter: `useremail="${userEmail}"`,
+      });
+      todo = response;
+    } catch (error) {
+      alert("fail to find");
+    }
+  }
 
-  function check(id) {
+  async function check(id, title) {
     currentnoticeid.set(id);
+    const uEmail = $currentUserEmail;
+    const response = await pb.collection("todolist").getFullList({
+      sort: "-created",
+      filter: `useremail="${uEmail}"`,
+    });
+
+    for (const item of response) {
+      if (item.tittle == title) {
+        isJoinedTodo.set("find");
+        break;
+      } else {
+        isJoinedTodo.set("noFind");
+      }
+    }
     push("/checknotice");
   }
 
@@ -130,8 +193,9 @@
     showModal4 = !showModal4;
   }
 
-  function jumpnew(id) {
+  function jumpnew(id, origin) {
     currentchannelid.set(id);
+    originChannelID.set(origin);
     push("/chantemplate");
   }
 
@@ -142,16 +206,41 @@
         sort: "-created",
         filter: `email="${userEmail}"`,
       });
-      username = response_[0].username;
+      username.set(response_[0].username);
     } catch (error) {
       alert("fail to find");
     }
+  }
+
+  async function jumptodo(title) {
+    const response_ = await pb.collection("notices").getFullList({
+      sort: "-created",
+      filter: `tittle="${title}"`,
+    });
+
+    currentnoticeid.set(response_[0].id);
+    const uEmail = $currentUserEmail;
+    const response = await pb.collection("todolist").getFullList({
+      sort: "-created",
+      filter: `useremail="${uEmail}"`,
+    });
+
+    for (const item of response) {
+      if (item.tittle == title) {
+        isJoinedTodo.set("find");
+        break;
+      } else {
+        isJoinedTodo.set("noFind");
+      }
+    }
+    push("/checknotice");
   }
   onMount(() => {
     checkUser();
     checkchan();
     checkNotice();
     fetchCreatedChannels();
+    checkTodolist();
   });
 
   let src = "userPicture.jpeg";
@@ -160,32 +249,37 @@
   }
 </script>
 
-<h1>LIPS - Lightweight Information Portal Service</h1>
+<Navbar />
 
 <body>
-  <div class="left-side">
+  <div class="flex flex-col w-2/5 items-center h-dvh space-y-10 py-10">
     <img {src} alt="user" class="button-img" />
-    <p class="username">{username}</p>
-    <button on:click={() => JumpNewPage("login")}> 登出 </button>
+    <p class="text-7xl text-black">{$username}</p>
+    <button class="btn" on:click={() => JumpNewPage("login")}> 登出 </button>
   </div>
 
-  <div class="right-side">
-    <button class="button-present" on:click={toggleModal}>频道管理</button>
+  <div class="flex flex-col space-y-10 w-3/5 h-dvh py-10">
+    <button class="btn w-4/5 h-1/5 text-5xl" on:click={toggleModal}
+      >频道管理</button
+    >
     <Modal isOpen={showModal} close={toggleModal}>
-      <h2 style="color: black;">频道管理</h2>
-      <div class="container">
-        <!-- {#each records as record}
-          <button class="button01" on:click={() => jumpnew(record.id)}
-            >#{record.channelname}</button
-          >
-        {/each} -->
-        <button class="button01" on:click={() => JumpNewPage("createChannel")}>
+      <h2>频 道 管 理</h2>
+      <div class="container flex flex-col space-y-3 items-center">
+        <button
+          class="btn btn-primary w-2/3 text-lg"
+          on:click={() => JumpNewPage("createChannel")}
+        >
           创建频道
         </button>
-        <button class="button01" on:click={() => JumpNewPage("searchChannel")}>
+        <button
+          class="btn btn-primary w-2/3 text-lg"
+          on:click={() => JumpNewPage("searchChannel")}
+        >
           查找频道
         </button>
-        <button class="button01" on:click={toggleModal2}>我的频道</button>
+        <button class="btn btn-primary w-2/3 text-lg" on:click={toggleModal2}
+          >我的频道</button
+        >
       </div>
     </Modal>
 
@@ -205,7 +299,9 @@
       {#if currentTab === "joined"}
         <div class="container01">
           {#each records as record}
-            <button class="button02" on:click={() => jumpnew(record.id)}
+            <button
+              class="button02"
+              on:click={() => jumpnew(record.id, record.originid)}
               >#{record.channelname}</button
             >
           {/each}
@@ -215,7 +311,10 @@
         <div class="container01">
           {#each createdChannels as channel}
             <div class="channel-row">
-              <button class="button02" on:click={() => jumpnew(channel.id)}>
+              <button
+                class="button02"
+                on:click={() => jumpnew(channel.id, channel.originid)}
+              >
                 #{channel.channelName}
               </button>
               <button
@@ -238,104 +337,66 @@
         />
       {/if}
     </Modal>
-    <!-- <button class="button-present" on:click={() => JumpNewPage("mychannel")}>
-      频道</button
-    > -->
-
-    <!-- <button class="button-present" on:click={() => JumpNewPage("mynotice")}>
-      通知管理
-    </button> -->
-    <button class="button-present" on:click={toggleModal3}>通知管理</button>
+    <button class="btn w-4/5 h-1/5 m-100 text-5xl" on:click={toggleModal3}
+      >通知管理</button
+    >
     <Modal isOpen={showModal3} close={toggleModal3}>
-      <h2 style="color: black;">通知管理</h2>
+      <h2>通 知 管 理</h2>
       <div class="container">
         {#each recordsNotice as record}
           <div
             class="record"
             role="button"
             tabindex="0"
-            on:click={() => check(record.id)}
+            on:click={() => check(record.id, record.tittle)}
             on:keypress
           >
             <div class="title">{record.tittle}</div>
             <div class="content">#{record.tag}</div>
             <div class="author">from:{record.username}</div>
           </div>
+          <div>
+            <button class="edit-btn" on:click={() => editnotice(record.id)}
+              >修改</button
+            >
+            <button class="delete-btn" on:click={() => deletenotice(record.id)}
+              >删除</button
+            >
+          </div>
         {/each}
       </div>
     </Modal>
 
-    <button class="button-present" on:click={toggleModal4}>待办事项</button>
-    <Modal isOpen={showModal4} close={toggleModal4}>
-      <h2 style="color: black;">待办事项</h2>
-      <div class="container"></div>
-    </Modal>
-    <!-- <button
-      class="button-present"
-      on:click={() => JumpNewPage("checkInformation")}
+    <button class="btn w-4/5 h-1/5 text-5xl" on:click={toggleModal4}
+      >待办事项</button
     >
-      待办事项
-    </button> -->
+    <Modal isOpen={showModal4} close={toggleModal4}>
+      <h2>待 办 事 项</h2>
+      <div class="container">
+        {#each todo as todothing}
+          <div
+            class="record"
+            role="button"
+            tabindex="0"
+            on:click={() => jumptodo(todothing.tittle)}
+            on:keypress
+          >
+            <button class="chacha" on:click={() => deletetodo(todothing.id)}
+              >x</button
+            >
+            <div class="title">{todothing.tittle}</div>
+            <div class="content">#{todothing.tag}</div>
+            <div class="author">
+              from:{todothing.year}/{todothing.month}/{todothing.day}
+            </div>
+          </div>
+        {/each}
+      </div>
+    </Modal>
   </div></body
 >
 
 <style>
-  body {
-    height: 100%;
-    margin: 0;
-    padding: 0;
-    display: flex;
-  }
-  .username {
-    font-size: 27px; /* 或任何您喜欢的大小 */
-  }
-
-  .left-side {
-    width: 40%;
-    height: 100vh;
-    /* background-color: #f0f0f0; */
-    /* 添加更多样式 */
-  }
-  .button01 {
-    width: 200px;
-    margin-top: 10px;
-    padding: 15px;
-    background-color: black;
-    border-radius: 4px;
-  }
-  .button01:hover {
-    color: #ffffff;
-    opacity: 1;
-    background-color: #6a6d6e;
-  }
-  .right-side {
-    width: 60%;
-    height: 100vh;
-    /* background-color: #fff; */
-    /* 添加更多样式 */
-  }
-  .button-present {
-    /* display: flex; */
-    justify-content: center;
-    align-items: center;
-    font-size: 50px; /* 或者更大，根据需要调整 */
-    letter-spacing: 50px; /* 增加字符间距，可以根据需要调整这个值 */
-    width: 80%; /* 增加宽度比例至90% */
-    margin-top: 10px;
-    padding: 10px 20px; /* 维持水平内边距以增加按钮的宽度 */
-    background-color: black;
-    border-radius: 20px; /* 增加border-radius的值使角变得更圆 */
-    margin-right: 20px; /* 为每个按钮添加右边距 */
-    margin-bottom: 20px; /* 为每个按钮下方添加10px的间隔 */
-    text-align: center;
-  }
-
-  .button-present:hover {
-    color: #ffffff; /* 选择一个与悬停背景色对比度高的颜色 */
-    opacity: 1; /* 确保按钮和文本在悬停时不会变得透明 */
-    /* 确保没有将文本设置为不可见 */
-    background-color: #6a6d6e; /* 悬停时的背景颜色 */
-  }
   .button-img {
     width: 360px; /* 设置图像的宽度 */
     height: 360px; /* 设置图像的高度为与宽度相同的值，以确保图像是正方形的 */
@@ -483,13 +544,22 @@
     background-color: #5c5c5c; /* 修改按钮悬停时的背景颜色 */
   }
 
+  .chacha:hover,
   .delete-btn:hover {
+    color: white;
     background-color: #a54444; /* 删除按钮悬停时的背景颜色 */
   }
 
+  .chacha {
+    background-color: white;
+    width: 20px;
+    color: #a3a1a1;
+    float: right;
+    text-align: center;
+  }
   .channel-row {
     display: flex;
     align-items: center;
-    justify-content: start;
+    justify-content: flex-start;
   }
 </style>
