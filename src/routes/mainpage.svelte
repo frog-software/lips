@@ -15,7 +15,7 @@
     isJoinedTodo,
     username,
   } from "../store.js";
-  
+
   const pb = new PocketBase(PocketBase_URL);
   let records = [];
   let createdChannels = []; // 存储用户创建的频道列表
@@ -184,13 +184,12 @@
         sort: "-created",
         filter: `email="${userEmail}"`,
       });
-      username.set(response_[0].username)
+      username.set(response_[0].username);
     } catch (error) {
       alert("fail to find");
     }
   }
 
-  
   //   function sleep(ms) {
   //   return new Promise(resolve => setTimeout(resolve, ms));
   // }
@@ -248,7 +247,7 @@
   }
 </script>
 
-<Navbar/>
+<Navbar />
 
 <body>
   <div class="flex flex-col w-2/5 items-center h-dvh space-y-10 py-10">
