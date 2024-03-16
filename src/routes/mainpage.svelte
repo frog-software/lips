@@ -28,23 +28,38 @@
   function editChannel(channelName) {
     currentchannelName.set(channelName);
     push("/updateChannel");
-    // const channel = createdChannels.find((c) => c.channelName === channelName);
-    // if (channel) {
-    //   selectedChannel = channel;
-    // }
   }
-
+  function editnotice(noticeid) {
+    currentnoticeid.set(noticeid);
+    push("/updatenotice");
+  }
   function handleUpdate() {
     fetchCreatedChannels(); // 重新获取频道列表
     checkchan();
     selectedChannel = null; // 重置selectedChannel，关闭编辑模态框
   }
-
+  async function deletenotice(noticeid) {
+    if (!confirm("确定要删除这则通知吗？")) {
+      return;
+    }
+    try {
+      const notices = await pb.collection("notices").getFullList({
+        filter: `id="${noticeid}"`,
+      });
+      for (const notice of notices) {
+        await pb.collection("notices").delete(notice.id);
+      }
+      alert("频道及相关数据删除成功。");
+      checkNotice();
+    } catch (error) {
+      console.error("删除频道及相关数据失败：", error);
+      alert("删除频道及相关数据失败。");
+    }
+  }
   async function deleteChannel(channelName) {
     if (!confirm("确定要删除这个频道吗？")) {
       return; // 用户取消操作，直接返回
     }
-
     try {
       // 查找channels集合中的指定频道
       const channels = await pb.collection("channels").getFullList({
@@ -164,18 +179,6 @@
     originChannelID.set(origin);
     push("/chantemplate");
   }
-  // async function test(id,cN){
-  //   currentchannelid.set(id);
-  //   alert($currentchannelid);
-  //   push("/chantemplate");
-  //     const response_ = await pb.collection("channels").getFullList({
-  //       sort: "-created",
-  //       filter: `channelName="${cN}"`,
-  //     });
-  //     originChannelID.set(response_[0].id);
-  //     originChannelID.set(response_[0].id);
-
-  // }
 
   async function checkUser() {
     try {
@@ -189,26 +192,7 @@
       alert("fail to find");
     }
   }
-  //   function sleep(ms) {
-  //   return new Promise(resolve => setTimeout(resolve, ms));
-  // }
 
-  // async function updateOriginChannelId(cN) {
-  //   try {
-  //     const response_ = await pb.collection("channels").getFullList({
-  //       sort: "-created",
-  //       filter: `channelName="${cN}"`,
-  //     });
-  //     originChannelID.set(response_[0].id);
-
-  //       originChannelID.set(response_[0].id);
-
-  //     alert($originChannelID);
-
-  //   } catch {
-  //     alert("error");
-  //   }
-  // }
   async function jumptodo(title) {
     const response_ = await pb.collection("notices").getFullList({
       sort: "-created",
@@ -338,13 +322,8 @@
       >频道管理</button
     >
     <Modal isOpen={showModal} close={toggleModal}>
-      <h2 style="color: black;">频道管理</h2>
+      <h2>频 道 管 理</h2>
       <div class="container flex flex-col space-y-3 items-center">
-        <!-- {#each records as record}
-          <button class="button01" on:click={() => jumpnew(record.id)}
-            >#{record.channelname}</button
-          >
-        {/each} -->
         <button
           class="btn btn-primary w-2/3 text-lg"
           on:click={() => JumpNewPage("createChannel")}
@@ -417,18 +396,11 @@
         />
       {/if}
     </Modal>
-    <!-- <button class="button-present" on:click={() => JumpNewPage("mychannel")}>
-      频道</button
-    > -->
-
-    <!-- <button class="button-present" on:click={() => JumpNewPage("mynotice")}>
-      通知管理
-    </button> -->
     <button class="btn w-4/5 h-1/5 m-100 text-5xl" on:click={toggleModal3}
       >通知管理</button
     >
     <Modal isOpen={showModal3} close={toggleModal3}>
-      <h2 style="color: black;">通知管理</h2>
+      <h2>通 知 管 理</h2>
       <div class="container">
         {#each recordsNotice as record}
           <div
@@ -442,6 +414,14 @@
             <div class="content">#{record.tag}</div>
             <div class="author">from:{record.username}</div>
           </div>
+          <div>
+            <button class="edit-btn" on:click={() => editnotice(record.id)}
+              >修改</button
+            >
+            <button class="delete-btn" on:click={() => deletenotice(record.id)}
+              >删除</button
+            >
+          </div>
         {/each}
       </div>
     </Modal>
@@ -450,7 +430,7 @@
       >待办事项</button
     >
     <Modal isOpen={showModal4} close={toggleModal4}>
-      <h2 style="color: black;">待办事项</h2>
+      <h2>待 办 事 项</h2>
       <div class="container">
         {#each todo as todothing}
           <div
@@ -469,12 +449,6 @@
         {/each}
       </div>
     </Modal>
-    <!-- <button
-      class="button-present"
-      on:click={() => JumpNewPage("checkInformation")}
-    >
-      待办事项
-    </button> -->
   </div></body
 >
 
