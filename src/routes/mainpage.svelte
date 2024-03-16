@@ -10,6 +10,8 @@
     currentchannelid,
     currentnoticeid,
     currentchannelName,
+    originChannelID,
+    isJoinedTodo,
   } from "../store.js";
 
   const pb = new PocketBase(PocketBase_URL);
@@ -111,9 +113,36 @@
       alert("fail to find");
     }
   }
+  let todo = [];
+  async function checkTodolist() {
+    try {
+      const userEmail = $currentUserEmail;
+      const response = await pb.collection("todolist").getFullList({
+        sort: "-created",
+        filter: `useremail="${userEmail}"`,
+      });
+      todo = response;
+    } catch (error) {
+      alert("fail to find");
+    }
+  }
 
-  function check(id) {
+  async function check(id, title) {
     currentnoticeid.set(id);
+    const uEmail = $currentUserEmail;
+    const response = await pb.collection("todolist").getFullList({
+      sort: "-created",
+      filter: `useremail="${uEmail}"`,
+    });
+
+    for (const item of response) {
+      if (item.tittle == title) {
+        isJoinedTodo.set("find");
+        break;
+      } else {
+        isJoinedTodo.set("noFind");
+      }
+    }
     push("/checknotice");
   }
 
@@ -130,10 +159,23 @@
     showModal4 = !showModal4;
   }
 
-  function jumpnew(id) {
+  function jumpnew(id, origin) {
     currentchannelid.set(id);
+    originChannelID.set(origin);
     push("/chantemplate");
   }
+  // async function test(id,cN){
+  //   currentchannelid.set(id);
+  //   alert($currentchannelid);
+  //   push("/chantemplate");
+  //     const response_ = await pb.collection("channels").getFullList({
+  //       sort: "-created",
+  //       filter: `channelName="${cN}"`,
+  //     });
+  //     originChannelID.set(response_[0].id);
+  //     originChannelID.set(response_[0].id);
+
+  // }
 
   async function checkUser() {
     try {
@@ -147,45 +189,177 @@
       alert("fail to find");
     }
   }
+  //   function sleep(ms) {
+  //   return new Promise(resolve => setTimeout(resolve, ms));
+  // }
+
+  // async function updateOriginChannelId(cN) {
+  //   try {
+  //     const response_ = await pb.collection("channels").getFullList({
+  //       sort: "-created",
+  //       filter: `channelName="${cN}"`,
+  //     });
+  //     originChannelID.set(response_[0].id);
+
+  //       originChannelID.set(response_[0].id);
+
+  //     alert($originChannelID);
+
+  //   } catch {
+  //     alert("error");
+  //   }
+  // }
+  async function jumptodo(title) {
+    const response_ = await pb.collection("notices").getFullList({
+      sort: "-created",
+      filter: `tittle="${title}"`,
+    });
+
+    currentnoticeid.set(response_[0].id);
+    const uEmail = $currentUserEmail;
+    const response = await pb.collection("todolist").getFullList({
+      sort: "-created",
+      filter: `useremail="${uEmail}"`,
+    });
+
+    for (const item of response) {
+      if (item.tittle == title) {
+        isJoinedTodo.set("find");
+        break;
+      } else {
+        isJoinedTodo.set("noFind");
+      }
+    }
+    push("/checknotice");
+  }
   onMount(() => {
     checkUser();
     checkchan();
     checkNotice();
     fetchCreatedChannels();
+    checkTodolist();
   });
 
   let src = "userPicture.jpeg";
   function JumpNewPage(address) {
     push("/" + address);
   }
+
+  let isOpen = false;
+
+  function toggleDrawer() {
+    isOpen = !isOpen;
+  }
 </script>
 
-<h1>LIPS - Lightweight Information Portal Service</h1>
+<div class="navbar bg-base-100 rounded-3xl shadow-xl topnavbar">
+  <div class="flex-none">
+    <div class="drawer">
+      <input
+        id="my-drawer"
+        type="checkbox"
+        bind:checked={isOpen}
+        class="drawer-toggle"
+      />
+      <div class="drawer-content">
+        <!-- Page content here -->
+        <button on:click={toggleDrawer} class="btn btn-square btn-ghost">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            class="inline-block w-5 h-5 stroke-current"
+            ><path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M4 6h16M4 12h16M4 18h16"
+            ></path></svg
+          >
+        </button>
+      </div>
+      <div class="drawer-side">
+        <label for="my-drawer" aria-label="close sidebar" class="drawer-overlay"
+        ></label>
+        <ul class="menu p-4 w-80 min-h-full bg-base-200 text-base-content">
+          <!-- Sidebar content here -->
+          <li><a href="/#">Sidebar Item 1</a></li>
+          <li><a href="/#">Sidebar Item 2</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="flex-1">
+    <a href="/#/login" class="btn btn-ghost text-xl logo">lips</a>
+  </div>
+  <div class="flex-none">
+    <div class="dropdown dropdown-end">
+      <div
+        class="mt-3 z-[1] card card-compact dropdown-content w-52 bg-base-100 shadow"
+      >
+        <div class="card-body">
+          <span class="font-bold text-lg">8 Items</span>
+          <span class="text-info">Subtotal: $999</span>
+          <div class="card-actions">
+            <button class="btn btn-primary btn-block">View cart</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="text-2xl mr-2">{username}</div>
+    <div class="dropdown dropdown-end">
+      <div tabindex="0" role="button" class="btn btn-ghost btn-circle avatar">
+        <div class="w-10 rounded-full">
+          <img alt="Tailwind CSS Navbar component" src="userPicture.jpeg" />
+        </div>
+      </div>
+      <ul
+        class="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-52"
+      >
+        <li><a class="justify-between" href="/#/profile">Profile</a></li>
+        <li><a href="/#/setting">Settings</a></li>
+        <li><a href="/#/login">Logout</a></li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<div class="navbar"></div>
 
 <body>
-  <div class="left-side">
+  <div class="flex flex-col w-2/5 items-center h-dvh space-y-10 py-10">
     <img {src} alt="user" class="button-img" />
-    <p class="username">{username}</p>
-    <button on:click={() => JumpNewPage("login")}> 登出 </button>
+    <p class="text-7xl text-black">{username}</p>
+    <button class="btn" on:click={() => JumpNewPage("login")}> 登出 </button>
   </div>
 
-  <div class="right-side">
-    <button class="button-present" on:click={toggleModal}>频道管理</button>
+  <div class="flex flex-col space-y-10 w-3/5 h-dvh py-10">
+    <button class="btn w-4/5 h-1/5 text-5xl" on:click={toggleModal}
+      >频道管理</button
+    >
     <Modal isOpen={showModal} close={toggleModal}>
       <h2 style="color: black;">频道管理</h2>
-      <div class="container">
+      <div class="container flex flex-col space-y-3 items-center">
         <!-- {#each records as record}
           <button class="button01" on:click={() => jumpnew(record.id)}
             >#{record.channelname}</button
           >
         {/each} -->
-        <button class="button01" on:click={() => JumpNewPage("createChannel")}>
+        <button
+          class="btn btn-primary w-2/3 text-lg"
+          on:click={() => JumpNewPage("createChannel")}
+        >
           创建频道
         </button>
-        <button class="button01" on:click={() => JumpNewPage("searchChannel")}>
+        <button
+          class="btn btn-primary w-2/3 text-lg"
+          on:click={() => JumpNewPage("searchChannel")}
+        >
           查找频道
         </button>
-        <button class="button01" on:click={toggleModal2}>我的频道</button>
+        <button class="btn btn-primary w-2/3 text-lg" on:click={toggleModal2}
+          >我的频道</button
+        >
       </div>
     </Modal>
 
@@ -205,7 +379,9 @@
       {#if currentTab === "joined"}
         <div class="container01">
           {#each records as record}
-            <button class="button02" on:click={() => jumpnew(record.id)}
+            <button
+              class="button02"
+              on:click={() => jumpnew(record.id, record.originid)}
               >#{record.channelname}</button
             >
           {/each}
@@ -215,7 +391,10 @@
         <div class="container01">
           {#each createdChannels as channel}
             <div class="channel-row">
-              <button class="button02" on:click={() => jumpnew(channel.id)}>
+              <button
+                class="button02"
+                on:click={() => jumpnew(channel.id, channel.originid)}
+              >
                 #{channel.channelName}
               </button>
               <button
@@ -245,7 +424,9 @@
     <!-- <button class="button-present" on:click={() => JumpNewPage("mynotice")}>
       通知管理
     </button> -->
-    <button class="button-present" on:click={toggleModal3}>通知管理</button>
+    <button class="btn w-4/5 h-1/5 m-100 text-5xl" on:click={toggleModal3}
+      >通知管理</button
+    >
     <Modal isOpen={showModal3} close={toggleModal3}>
       <h2 style="color: black;">通知管理</h2>
       <div class="container">
@@ -254,7 +435,7 @@
             class="record"
             role="button"
             tabindex="0"
-            on:click={() => check(record.id)}
+            on:click={() => check(record.id, record.tittle)}
             on:keypress
           >
             <div class="title">{record.tittle}</div>
@@ -265,10 +446,28 @@
       </div>
     </Modal>
 
-    <button class="button-present" on:click={toggleModal4}>待办事项</button>
+    <button class="btn w-4/5 h-1/5 text-5xl" on:click={toggleModal4}
+      >待办事项</button
+    >
     <Modal isOpen={showModal4} close={toggleModal4}>
       <h2 style="color: black;">待办事项</h2>
-      <div class="container"></div>
+      <div class="container">
+        {#each todo as todothing}
+          <div
+            class="record"
+            role="button"
+            tabindex="0"
+            on:click={() => jumptodo(todothing.tittle)}
+            on:keypress
+          >
+            <div class="title">{todothing.tittle}</div>
+            <div class="content">#{todothing.tag}</div>
+            <div class="author">
+              from:{todothing.year}/{todothing.month}/{todothing.day}
+            </div>
+          </div>
+        {/each}
+      </div>
     </Modal>
     <!-- <button
       class="button-present"
@@ -280,62 +479,6 @@
 >
 
 <style>
-  body {
-    height: 100%;
-    margin: 0;
-    padding: 0;
-    display: flex;
-  }
-  .username {
-    font-size: 27px; /* 或任何您喜欢的大小 */
-  }
-
-  .left-side {
-    width: 40%;
-    height: 100vh;
-    /* background-color: #f0f0f0; */
-    /* 添加更多样式 */
-  }
-  .button01 {
-    width: 200px;
-    margin-top: 10px;
-    padding: 15px;
-    background-color: black;
-    border-radius: 4px;
-  }
-  .button01:hover {
-    color: #ffffff;
-    opacity: 1;
-    background-color: #6a6d6e;
-  }
-  .right-side {
-    width: 60%;
-    height: 100vh;
-    /* background-color: #fff; */
-    /* 添加更多样式 */
-  }
-  .button-present {
-    /* display: flex; */
-    justify-content: center;
-    align-items: center;
-    font-size: 50px; /* 或者更大，根据需要调整 */
-    letter-spacing: 50px; /* 增加字符间距，可以根据需要调整这个值 */
-    width: 80%; /* 增加宽度比例至90% */
-    margin-top: 10px;
-    padding: 10px 20px; /* 维持水平内边距以增加按钮的宽度 */
-    background-color: black;
-    border-radius: 20px; /* 增加border-radius的值使角变得更圆 */
-    margin-right: 20px; /* 为每个按钮添加右边距 */
-    margin-bottom: 20px; /* 为每个按钮下方添加10px的间隔 */
-    text-align: center;
-  }
-
-  .button-present:hover {
-    color: #ffffff; /* 选择一个与悬停背景色对比度高的颜色 */
-    opacity: 1; /* 确保按钮和文本在悬停时不会变得透明 */
-    /* 确保没有将文本设置为不可见 */
-    background-color: #6a6d6e; /* 悬停时的背景颜色 */
-  }
   .button-img {
     width: 360px; /* 设置图像的宽度 */
     height: 360px; /* 设置图像的高度为与宽度相同的值，以确保图像是正方形的 */
@@ -490,6 +633,6 @@
   .channel-row {
     display: flex;
     align-items: center;
-    justify-content: start;
+    justify-content: flex-start;
   }
 </style>
