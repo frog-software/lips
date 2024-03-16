@@ -34,6 +34,7 @@
           >
         </button>
       </div>
+
       <div class="drawer-side">
         <label for="my-drawer" aria-label="close sidebar" class="drawer-overlay"
         ></label>
@@ -45,9 +46,11 @@
       </div>
     </div>
   </div>
+
   <div class="flex-1">
     <a href="/#/login" class="btn btn-ghost text-xl logo">lips</a>
   </div>
+
   <div class="flex-none">
     <div class="dropdown dropdown-end">
       <div
@@ -76,7 +79,7 @@
             >{$username}</a
           >
         </li>
-        <li><a class="justify-between" href="/#/profile">Profile</a></li>
+        <li><a href="/#/main1">Profile</a></li>
         <li><a href="/#/setting">Settings</a></li>
         <li><a href="/#/login">Logout</a></li>
       </ul>

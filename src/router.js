@@ -1,5 +1,6 @@
 import Login from "./routes/login.svelte";
 import MainPage from "./routes/mainpage.svelte";
+import MainPage1 from "./routes/mainpage1.svelte";
 import DoorPage from "./routes/doorPage.svelte";
 import Register from "./routes/register.svelte";
 import CreateChannel from "./routes/createChannel.svelte";
@@ -19,6 +20,7 @@ export default {
   "/": DoorPage,
   "/login": Login,
   "/main": MainPage,
+  "/main1": MainPage1,
   "/register": Register,
   "/createChannel": CreateChannel,
   "/checkInformation": CheckInformation,
