@@ -81,12 +81,12 @@
       <h2 class="text-2xl font-semibold mb-4 text-black">Channels</h2>
       <div class="grid grid-cols-2 gap-4">
         {#each channels as channel}
-          <div
+          <button
             class="channel-box"
             on:click={() => navigateToChannelDetail(channel.channelname)}
           >
             {channel.channelname}
-          </div>
+          </button>
         {/each}
       </div>
     </div>
@@ -96,12 +96,12 @@
       <h2 class="text-2xl font-semibold mb-4 text-black">Todos</h2>
       <div class="grid grid-cols-2 gap-4">
         {#each todos as todo}
-          <div
+          <button
             class="todo-box"
             on:click={() => navigateToTodoDetail(todo.tittle)}
           >
             {todo.tittle}
-          </div>
+          </button>
         {/each}
       </div>
     </div>
