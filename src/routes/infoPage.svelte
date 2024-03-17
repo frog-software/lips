@@ -30,25 +30,24 @@
 </script>
 
 <div class="genshin">
-<div class="container">
-  <div class="left">
-    <div class="top">
-      <div class="blockTitle">My channels</div>
-      {#if isFind}
-        {#each myChannel.slice(0, 5) as mychannel}
-          <div class="channel">{mychannel.channelName}</div>
-        {/each}
-      {:else}
-        <p style="color:black">您还没有加入频道，快去加入一个吧!</p>
-      {/if}
+  <div class="container">
+    <div class="left">
+      <div class="top">
+        <div class="blockTitle">My channels</div>
+        {#if isFind}
+          {#each myChannel.slice(0, 5) as mychannel}
+            <div class="channel">{mychannel.channelName}</div>
+          {/each}
+        {:else}
+          <p style="color:black">您还没有加入频道，快去加入一个吧!</p>
+        {/if}
+      </div>
+      <div class="bottom">
+        <div class="blockTitle">Recommended channels</div>
+      </div>
     </div>
-    <div class="bottom">
-      <div class="blockTitle">Recommended channels</div>
-    </div>
-  </div>
 
-
-  <div class="right">
+    <div class="right">
       <h1 class="articleHead">欢 迎 来 到 LIPS！</h1>
       <p class="articleBody">
         关于lips：
@@ -57,21 +56,19 @@
         同时，你可能会好奇加入频道的功能，我们再把视线拉回到搜索框右侧，第一个按钮里有你的待办事项，你可以点击并查看对你比较重要的频道内的通知。并且右上角你还能看到你的头像，点进去你会看到你所有加入的频道以及个人信息，你甚至可以在我的频道这个选项中创建一个属于你自己的频道，并成为频道管理者。如果你的事情都办理好了的话，你可以注销账号，来保证自己的安全性，当然，如果是你自己的电脑，你可以把账号信息保留，以便下次使用。
         最后，祝你使用愉快！
       </p>
+    </div>
   </div>
 </div>
 
-</div>
 <style>
-.genshin{
-  background-image: url('public/Rpp.png'); /* 设置背景*/
-  background-position: center; /* 水平和垂直居中背景图 */
-  background-size: cover; /* 或者使用contain根据具体需求 */
-}
+  .genshin {
+    background-image: url("public/Rpp.png"); /* 设置背景*/
+    background-position: center; /* 水平和垂直居中背景图 */
+    background-size: cover; /* 或者使用contain根据具体需求 */
+  }
   .container {
     display: flex;
     height: 100vh; /* 让容器占据整个视口高度 */
-   
-   
   }
 
   .blockTitle {
@@ -91,7 +88,7 @@
     width: 70%;
     height: 100%; /* 右侧部分占据剩余宽度和全部高度 */
     background-color: #f0f0f0; /* 为右侧部分添加背景色以区分 */
-    background-image: url('public/Rpp.png'); /* 设置背景*/
+    background-image: url("public/Rpp.png"); /* 设置背景*/
     overflow-y: auto; /* 允许垂直方向上的滚动 */
     background-position: center; /* 水平和垂直居中背景图 */
     margin-left: 3%; /* 居中显示 */
@@ -101,7 +98,7 @@
   }
 
   .channel {
-    font-weight:bolder;
+    font-weight: bolder;
     color: black; /* 设置文本颜色 */
     margin-bottom: 10px; /* 设置记录之间的间隔 */
     font-size: xx-large;
