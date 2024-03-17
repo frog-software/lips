@@ -40,7 +40,7 @@
 
       try {
         await pb.collection("channels").update(channelId, data);
-        alert("Channel updated successfully");
+        alert("频道修改成功！");
         isLoading = false;
         push("/main");
       } catch (error) {
@@ -49,7 +49,7 @@
       }
     } else {
       // 如果channelId不存在，可以选择创建新频道或者显示错误消息
-      alert("Channel does not exist.");
+      alert("所选频道不存在。");
       isLoading = false;
     }
   }
