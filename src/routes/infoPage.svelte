@@ -51,32 +51,31 @@
   });
 </script>
 
-
 <Navbar />
 <div class="genshin">
-<div class="container">
-  <div class="left">
-    <div class="top">
-      <div class="blockTitle">My channels</div>
-      {#if isFind}
-        {#each myChannel.slice(0, 5) as mychannel}
-          <button class="channel" on:click={() => jumpnew(mychannel.originid)}
-            >{mychannel.channelname}</button
+  <div class="container">
+    <div class="left">
+      <div class="top">
+        <div class="blockTitle">My channels</div>
+        {#if isFind}
+          {#each myChannel.slice(0, 5) as mychannel}
+            <button class="channel" on:click={() => jumpnew(mychannel.originid)}
+              >{mychannel.channelname}</button
+            >
+          {/each}
+        {:else}
+          <p style="color:black">您还没有加入频道，快去加入一个吧!</p>
+        {/if}
+      </div>
+      <div class="bottom">
+        <div class="blockTitle">Recommended channels</div>
+        {#each recChannel.slice(0, 5) as mychannel}
+          <button class="channel" on:click={() => jumpnew(mychannel.id)}
+            >{mychannel.channelName}</button
           >
         {/each}
-      {:else}
-        <p style="color:black">您还没有加入频道，快去加入一个吧!</p>
-      {/if}
+      </div>
     </div>
-    <div class="bottom">
-      <div class="blockTitle">Recommended channels</div>
-      {#each recChannel.slice(0, 5) as mychannel}
-        <button class="channel" on:click={() => jumpnew(mychannel.id)}
-          >{mychannel.channelName}</button
-        >
-      {/each}
-    </div>
-  </div>
 
     <div class="right">
       <h1 class="articleHead">欢 迎 来 到 LIPS！</h1>
