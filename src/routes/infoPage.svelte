@@ -4,6 +4,7 @@
   import { currentUserEmail, originChannelID } from "../store.js";
   import { push } from "svelte-spa-router";
   import { onMount } from "svelte";
+  import Navbar from "../components/Navbar.svelte";
 
   const pb = new PocketBase(PocketBase_URL);
   let isFind = false;
@@ -37,6 +38,7 @@
   });
 </script>
 
+<Navbar />
 <div class="container">
   <div class="left">
     <div class="top">

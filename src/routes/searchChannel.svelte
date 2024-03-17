@@ -90,18 +90,6 @@
 
   function updateOriginChannelId(id) {
     originChannelID.set(id);
-    // try {
-    //   const response_ = await pb.collection("channels").getFullList({
-    //     sort: "-created",
-    //     filter: `channelName="${cN}"`,
-    //   });
-    //   // originChannelID.set(response_[0].id);
-    //   // originChannelID.set(response_[0].id);
-    //   const value =response_[0].id;
-    //    window.location.href = `./chantemplate?value=${encodeURIComponent(value)}`;
-    // } catch {
-    //   alert("error");
-    // }
   }
   //导航到指定频道详情页的函数
   function navigateToChannelDetail(channelName) {

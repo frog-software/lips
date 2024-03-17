@@ -11,6 +11,7 @@
   } from "../store.js";
   import { push } from "svelte-spa-router";
   import { onMount } from "svelte";
+  import Navbar from "../components/Navbar.svelte";
 
   const pb = new PocketBase(PocketBase_URL);
   let records = [];
@@ -64,6 +65,8 @@
     selectedtag.set(tagname);
   }
 </script>
+
+<Navbar />
 
 <button on:click={send}>发送通知</button>
 
