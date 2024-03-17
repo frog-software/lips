@@ -1,5 +1,6 @@
 import Login from "./routes/login.svelte";
 import MainPage from "./routes/mainpage.svelte";
+import MainPage1 from "./routes/mainpage1.svelte";
 import DoorPage from "./routes/doorPage.svelte";
 import Register from "./routes/register.svelte";
 import CreateChannel from "./routes/createChannel.svelte";
@@ -14,10 +15,13 @@ import Checknotice from "./routes/checknotice.svelte";
 import UpdateChannel from "./routes/updateChannel.svelte";
 import Jumptag from "./routes/jumptag.svelte";
 import InfoPage from "./routes/infoPage.svelte";
+import Updatenotice from "./routes/updatenotice.svelte";
+import Mychannels from "./routes/myChannels.svelte";
 export default {
   "/": DoorPage,
   "/login": Login,
   "/main": MainPage,
+  "/main1": MainPage1,
   "/register": Register,
   "/createChannel": CreateChannel,
   "/checkInformation": CheckInformation,
@@ -31,4 +35,6 @@ export default {
   "/updateChannel": UpdateChannel,
   "/jumptag": Jumptag,
   "/infoPage": InfoPage,
+  "/updatenotice": Updatenotice,
+  "/myChannels": Mychannels,
 };
