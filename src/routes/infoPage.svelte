@@ -1,7 +1,7 @@
 <script>
   import PocketBase from "pocketbase";
   import { PocketBase_URL } from "../utils/api/index";
-  import { currentUserEmail, originChannelID } from "../store.js";
+  import { currentUserEmail, originChannelID, username } from "../store.js";
   import { push } from "svelte-spa-router";
   import { onMount } from "svelte";
   import Navbar from "../components/Navbar.svelte";
@@ -27,6 +27,18 @@
       alert("fail to find");
     }
   }
+  async function checkUser() {
+    try {
+      const userEmail = $currentUserEmail;
+      const response_ = await pb.collection("users").getFullList({
+        sort: "-created",
+        filter: `email="${userEmail}"`,
+      });
+      username.set(response_[0].username);
+    } catch (error) {
+      alert("fail to find");
+    }
+  }
   function jumpnew(origin) {
     //currentchannelid.set(id);
     originChannelID.set(origin);
@@ -35,6 +47,7 @@
 
   onMount(() => {
     checkIsJoined();
+    checkUser();
   });
 </script>
 
