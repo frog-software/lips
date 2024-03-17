@@ -141,7 +141,6 @@
         </div>
       </div>
     </div>
-    
   </div>
   <div class="flex-1">
     <a href="/#/login" class="btn btn-ghost text-xl logo">lips</a>
