@@ -1,20 +1,24 @@
 <script>
   import PocketBase from "pocketbase";
   import { PocketBase_URL } from "../utils/api/index";
-  import { currentUserEmail } from "../store.js";
-  //import { push } from "svelte-spa-router";
+  import { currentUserEmail, originChannelID, username } from "../store.js";
+  import { push } from "svelte-spa-router";
   import { onMount } from "svelte";
+  import Navbar from "../components/Navbar.svelte";
 
   const pb = new PocketBase(PocketBase_URL);
   let isFind = false;
   let myChannel = [];
+  let recChannel = [];
   async function checkIsJoined() {
     try {
       const userEmail = $currentUserEmail;
-      const response = await pb.collection("channels").getFullList({
+      const response = await pb.collection("users_channels").getFullList({
         sort: "-created",
         filter: `useremail="${userEmail}"`,
       });
+      const records = await pb.collection("channels").getFullList();
+      recChannel = records;
       myChannel = response;
       if (myChannel != null) {
         isFind = true;
@@ -23,9 +27,27 @@
       alert("fail to find");
     }
   }
+  async function checkUser() {
+    try {
+      const userEmail = $currentUserEmail;
+      const response_ = await pb.collection("users").getFullList({
+        sort: "-created",
+        filter: `email="${userEmail}"`,
+      });
+      username.set(response_[0].username);
+    } catch (error) {
+      alert("fail to find");
+    }
+  }
+  function jumpnew(origin) {
+    //currentchannelid.set(id);
+    originChannelID.set(origin);
+    push("/chantemplate");
+  }
 
   onMount(() => {
     checkIsJoined();
+    checkUser();
   });
 </script>
 
@@ -46,6 +68,9 @@
         <div class="blockTitle">Recommended channels</div>
       </div>
     </div>
+
+<Navbar />
+
 
     <div class="right">
       <h1 class="articleHead">欢 迎 来 到 LIPS！</h1>
