@@ -15,6 +15,7 @@ import UpdateChannel from "./routes/updateChannel.svelte";
 import Jumptag from "./routes/jumptag.svelte";
 import InfoPage from "./routes/infoPage.svelte";
 import Updatenotice from "./routes/updatenotice.svelte";
+import Mychannels from "./routes/myChannels.svelte";
 export default {
   "/": DoorPage,
   "/login": Login,
@@ -33,4 +34,5 @@ export default {
   "/jumptag": Jumptag,
   "/infoPage": InfoPage,
   "/updatenotice": Updatenotice,
+  "/myChannels": Mychannels,
 };
