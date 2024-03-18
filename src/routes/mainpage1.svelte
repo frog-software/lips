@@ -80,16 +80,16 @@
     }
     push("/checknotice");
   }
+  let src = "userPicture.jpeg";
 </script>
 
 <Navbar />
 
 <div class="flex h-screen">
   <!-- 左侧用户信息 -->
-  <div class="flex flex-col w-2/5 items-center space-y-10 py-10 user-info">
-    <img src="userPicture.jpeg" alt="User Profile" class="user-picture" />
-    <p class="username">{$username}</p>
-    <button class="btn logout" on:click={logout}>登出</button>
+  <div class="flex flex-col w-2/5 items-center h-dvh space-y-10 py-10">
+    <img {src} alt="user" class="button-img" />
+    <p class="text-7xl text-black">{$username}</p>
   </div>
 
   <!-- 右侧内容区 -->
@@ -234,6 +234,12 @@
     }
   }
 
+  .button-img {
+    width: 360px; /* 设置图像的宽度 */
+    height: 360px; /* 设置图像的高度为与宽度相同的值，以确保图像是正方形的 */
+    border-radius: 50%; /* 这将使图像的边角变圆，形成圆形 */
+    object-fit: cover; /* 确保图像在调整大小时保持其宽高比 */
+  }
   /* 根据需要继续添加更多的媒体查询规则 */
 
   /* 可能需要调整这些值来更好地匹配上传的图片 */
