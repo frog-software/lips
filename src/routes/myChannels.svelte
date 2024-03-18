@@ -51,7 +51,7 @@
             {channel.channelDescription}
           </div>
           <div class="channel-date text-sm">
-            {channel.year}年 {channel.month}月 {channel.day}日加入
+            {channel.year}年{channel.month}月{channel.day}日加入
           </div>
         </div>
       </div>
