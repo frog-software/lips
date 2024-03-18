@@ -39,7 +39,7 @@
     }
   }
   function isid() {
-    if (window.location.href === "http://localhost:5173/#/main") {
+    if (window.location.href === "http://localhost:5173/#/infoPage") {
       isMainPage = true;
     } else {
       isMainPage = false;

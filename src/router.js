@@ -17,7 +17,6 @@ import Jumptag from "./routes/jumptag.svelte";
 import InfoPage from "./routes/infoPage.svelte";
 import Updatenotice from "./routes/updatenotice.svelte";
 import Mychannels from "./routes/myChannels.svelte";
-import Searchresult from "./routes/searchresult.svelte";
 
 export default {
   "/": DoorPage,
@@ -39,5 +38,4 @@ export default {
   "/infoPage": InfoPage,
   "/updatenotice": Updatenotice,
   "/myChannels": Mychannels,
-  "/searchresult": Searchresult,
 };
