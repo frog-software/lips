@@ -81,7 +81,7 @@
               >{$username}</a
             >
           </li>
-          <li><a class="justify-between" href="/#/profile">Profile</a></li>
+          <li><a href="/#/main1">Profile</a></li>
           <li><a href="/#/myChannels">Mychannels</a></li>
           <li><a href="/#/login">Logout</a></li>
         </ul>
