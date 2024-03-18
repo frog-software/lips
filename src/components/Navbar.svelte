@@ -1,5 +1,6 @@
 <script>
   import { username } from "../store.js";
+  import Searchlan from "../components/searchlan.svelte";
   import TodolistButton from "./TodolistButton.svelte";
   import InfoButton from "./infoButton.svelte";
 
@@ -55,6 +56,8 @@
     <div class="flex-1">
       <a href="/#/infoPage" class="btn btn-ghost text-xl logo">lips</a>
     </div>
+
+    <Searchlan />
     <TodolistButton />
     <InfoButton />
     <div class="flex-none">
