@@ -1,5 +1,7 @@
 <script>
   import { username } from "../store.js";
+  import TodolistButton from "./TodolistButton.svelte";
+  import InfoButton from "./infoButton.svelte";
 
   let isOpen = false;
 
@@ -49,9 +51,12 @@
         </div>
       </div>
     </div>
+
     <div class="flex-1">
       <a href="/#/infoPage" class="btn btn-ghost text-xl logo">lips</a>
     </div>
+    <TodolistButton />
+    <InfoButton />
     <div class="flex-none">
       <div class="dropdown dropdown-end">
         <div
