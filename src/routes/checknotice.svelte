@@ -73,6 +73,7 @@
 <style>
   .record {
     width: auto;
+    height: 98%;
     border: 1px solid #ccc;
     padding: 15px;
     margin: 10px 0;

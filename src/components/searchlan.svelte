@@ -7,12 +7,12 @@
 
   const pb = new PocketBase(PocketBase_URL);
   let searchQuery = "";
-  // let isMainPage = true;
   let errorMessage = "";
   let searchchannels = [];
   let searchnotices = [];
   let searchtags = [];
   let isFocused = false;
+  let isMainPage = false;
 
   function jumpnew(id) {
     originChannelID.set(id);
@@ -38,56 +38,80 @@
       isFocused = false;
     }
   }
-  // function isid() {
-  //   if ($currentchannelid != null) isMainPage = false;
-  // }
-  // function search(){
-  //   alert(isMainPage);
-  // }
+  function isid() {
+    if (window.location.href === "http://localhost:5173/#/main") {
+      isMainPage = true;
+    } else {
+      isMainPage = false;
+    }
+  }
+
   async function search() {
     errorMessage = "";
     try {
       // 获取所有频道及通知记录
       const allRecords = await pb.collection("channels").getFullList();
       const allnotices = await pb.collection("notices").getFullList();
-      // 根据输入过滤并限制结果数量为最多4个
-      if (searchQuery.length > 0) {
-        const filteredRecords = allRecords.filter((record) =>
-          record.channelName.startsWith(searchQuery),
-        );
-        const limitedRecords = filteredRecords.slice(0, 4);
-        searchchannels = limitedRecords;
+      if (isMainPage) {
+        if (searchQuery.length > 0) {
+          const filteredRecords = allRecords.filter((record) =>
+            record.channelName.startsWith(searchQuery),
+          );
+          searchchannels = filteredRecords;
 
-        const filterednotices = allnotices.filter((record) =>
-          record.tittle.startsWith(searchQuery),
-        );
-        const limitednotices = filterednotices.slice(0, 4);
-        searchnotices = limitednotices;
+          const filterednotices = allnotices.filter((record) =>
+            record.tittle.startsWith(searchQuery),
+          );
+          searchnotices = filterednotices;
 
-        const filteredtags = allnotices.filter((record) =>
-          record.tag.startsWith(searchQuery),
-        );
-        const limitedtags = filteredtags.slice(0, 4);
-        searchtags = limitedtags;
-        if (
-          limitedRecords.length === 0 &&
-          limitednotices.length === 0 &&
-          limitedtags.length === 0
-        ) {
-          errorMessage = "没有找到相关频道或通知。";
+          const filteredtags = allnotices.filter((record) =>
+            record.tag.startsWith(searchQuery),
+          );
+          searchtags = filteredtags;
+          if (
+            searchchannels.length === 0 &&
+            searchnotices.length === 0 &&
+            filteredtags.length === 0
+          ) {
+            errorMessage = "没有找到相关频道或通知。";
+          }
+        } else {
+          searchchannels = [];
+          searchnotices = [];
+          searchtags = [];
         }
       } else {
-        searchchannels = [];
-        searchnotices = [];
+        //当前页面不是主页时
+        if (searchQuery.length > 0) {
+          const filterednotices = allnotices.filter(
+            (record) =>
+              record.tittle.startsWith(searchQuery) &&
+              record.channelid == $originChannelID,
+          );
+          searchnotices = filterednotices;
+
+          const filteredtags = allnotices.filter(
+            (record) =>
+              record.tag.startsWith(searchQuery) &&
+              record.channelid == $originChannelID,
+          );
+          searchtags = filteredtags;
+          if (searchnotices.length === 0 && searchtags.length === 0) {
+            errorMessage = "没有找到相关通知。";
+          }
+        } else {
+          searchtags = [];
+          searchnotices = [];
+        }
       }
     } catch (error) {
-      console.error("搜索频道时发生错误：", error);
-      errorMessage = "搜索频道时发生错误：" + error.message;
+      console.error("搜索通知时发生错误：", error);
+      errorMessage = "搜索通知时发生错误：" + error.message;
     }
   }
 
   onMount(() => {
-    // isid();
+    isid();
     document.addEventListener("click", handleClickOutside);
   });
   onDestroy(() => {
@@ -104,7 +128,6 @@
     placeholder="search everything..."
     on:focus={() => (isFocused = true)}
   />
-  <button on:click={() => search()}>search</button>
   {#if errorMessage}
     <div class="searchdrop">
       <div
@@ -201,20 +224,6 @@
   input[type="text"]:focus {
     width: 400px;
     border-color: #007bff;
-  }
-  button {
-    padding: 8px 15px;
-    font-size: 16px;
-    background-color: #c8c8c8;
-    color: white;
-    border: none;
-    border-radius: 16px;
-    cursor: pointer;
-    margin-left: 10px;
-    outline: none;
-  }
-  button:hover {
-    background-color: #0056b3;
   }
   .channame {
     display: flex; /* 启用Flexbox布局 */
