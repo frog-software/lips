@@ -27,9 +27,6 @@
   let showtodo = true;
   let selectedChannel = null;
 
-  function ismain() {
-    currentchannelid.set(null);
-  }
   function editChannel(channelName) {
     currentchannelName.set(channelName);
     push("/updateChannel");
@@ -249,7 +246,6 @@
     checkNotice();
     fetchCreatedChannels();
     checkTodolist();
-    ismain();
   });
 
   let src = "userPicture.jpeg";

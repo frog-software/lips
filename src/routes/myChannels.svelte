@@ -4,7 +4,12 @@
   import { onMount } from "svelte";
   import Navbar from "../components/Navbar.svelte";
   import { push } from "svelte-spa-router";
-  import { currentUserEmail, username, originChannelID } from "../store.js";
+  import {
+    currentUserEmail,
+    username,
+    originChannelID,
+    channelName,
+  } from "../store.js";
 
   const pb = new PocketBase(PocketBase_URL);
   let src = "userPicture.jpeg";
@@ -18,7 +23,8 @@
     });
     channels = response_;
   }
-  function jumpnew(origin) {
+  function jumpnew(origin, name) {
+    channelName.set(name);
     originChannelID.set(origin);
     push("/chantemplate");
   }
@@ -39,7 +45,7 @@
       <div class="channel bg-transparent border-b border-gray-400 p-4">
         <div
           class="channel-name text-3xl mb-2"
-          on:click={() => jumpnew(channel.originid)}
+          on:click={() => jumpnew(channel.originid, channel.channelname)}
           role="button"
           tabindex="0"
           on:keypress
