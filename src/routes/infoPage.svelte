@@ -1,7 +1,12 @@
 <script>
   import PocketBase from "pocketbase";
   import { PocketBase_URL } from "../utils/api/index";
-  import { currentUserEmail, originChannelID, username } from "../store.js";
+  import {
+    currentUserEmail,
+    originChannelID,
+    username,
+    channelName,
+  } from "../store.js";
   import { push } from "svelte-spa-router";
   import { onMount } from "svelte";
   import Navbar from "../components/Navbar.svelte";
@@ -39,9 +44,11 @@
       alert("fail to find");
     }
   }
-  function jumpnew(origin) {
+  function jumpnew(origin, Cname) {
     //currentchannelid.set(id);
     originChannelID.set(origin);
+    channelName.set(Cname);
+    //alert(channelName);
     push("/chantemplate");
   }
 
@@ -52,6 +59,7 @@
 </script>
 
 <Navbar />
+
 <div class="genshin">
   <div class="container">
     <div class="left">

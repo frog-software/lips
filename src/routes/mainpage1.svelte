@@ -10,6 +10,7 @@
     isJoinedTodo,
     username,
     originChannelID,
+    channelName,
   } from "../store.js";
 
   const pb = new PocketBase(PocketBase_URL);
@@ -48,12 +49,8 @@
     await fetchTodos();
   });
 
-  function logout() {
-    // 登出逻辑，这里简单地跳转到登录页面
-    push("/login");
-  }
-
-  function jumpnew(origin) {
+  function jumpnew(origin, name) {
+    channelName.set(name);
     originChannelID.set(origin);
     push("/chantemplate");
   }
@@ -102,7 +99,7 @@
           <!-- 限制显示到最多6个频道 -->
           <button
             class="channel-box"
-            on:click={() => jumpnew(channel.originid)}
+            on:click={() => jumpnew(channel.originid, channel.channelname)}
           >
             {channel.channelname}
           </button>
@@ -180,22 +177,6 @@
 
   /* 响应式设计的改进 */
   @media (max-width: 1024px) {
-    .user-info {
-      flex-direction: column;
-      width: 100%;
-      align-items: center;
-      padding-top: 5vh;
-    }
-
-    .user-picture {
-      width: 50vw;
-      height: 50vw; /* 保持图片的纵横比 */
-    }
-
-    .username {
-      font-size: 5vw;
-    }
-
     .content-area {
       width: 100%;
       padding: 2vw;
@@ -219,10 +200,6 @@
   }
 
   @media (max-width: 768px) {
-    .username {
-      font-size: 6vw;
-    }
-
     .channel-box,
     .todo-item {
       font-size: 5vw;

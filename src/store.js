@@ -15,3 +15,4 @@ export const originChannelID = writable("");
 export const isJoinedTodo = writable("");
 
 export const username = writable("");
+export const channelName = writable("");
