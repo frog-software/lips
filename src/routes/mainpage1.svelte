@@ -86,22 +86,14 @@
 
 <div class="flex h-screen">
   <!-- 左侧用户信息 -->
-  <div
-    class="flex flex-col w-2/5 items-center space-y-10 py-10"
-    style="padding-top: 90px;"
-  >
-    <img
-      src="userPicture.jpeg"
-      alt="User Profile"
-      style="width: 300px; height: 300px; object-fit: cover;"
-      class="rounded-full"
-    />
-    <p class="text-4xl text-black">{$username}</p>
-    <button class="btn" on:click={logout}>登出</button>
+  <div class="flex flex-col w-2/5 items-center space-y-10 py-10 user-info">
+    <img src="userPicture.jpeg" alt="User Profile" class="user-picture" />
+    <p class="username">{$username}</p>
+    <button class="btn logout" on:click={logout}>登出</button>
   </div>
 
   <!-- 右侧内容区 -->
-  <div class="w-3/5 p-4">
+  <div class="content-area w-3/5 p-4">
     <!-- 频道列表 -->
     <div class="channels h-3/5 overflow-y-auto p-2">
       <h2 class="text-2xl font-semibold mb-4 text-black">Channels</h2>
@@ -138,6 +130,7 @@
 <style>
   .channels {
     height: 55%;
+    overflow: hidden;
   }
 
   .todos {
@@ -184,6 +177,65 @@
     font-size: 16px;
     color: #333; /* Slightly lighter text for content */
   }
+  /* 基础样式保持不变 */
+
+  /* 响应式设计的改进 */
+  @media (max-width: 1024px) {
+    .user-info {
+      flex-direction: column;
+      width: 100%;
+      align-items: center;
+      padding-top: 5vh;
+    }
+
+    .user-picture {
+      width: 50vw;
+      height: 50vw; /* 保持图片的纵横比 */
+    }
+
+    .username {
+      font-size: 5vw;
+    }
+
+    .content-area {
+      width: 100%;
+      padding: 2vw;
+    }
+
+    .channel-box,
+    .todo-item {
+      font-size: 4vw;
+      padding: 2vw;
+    }
+
+    .todo-title,
+    .todo-content {
+      font-size: 3vw;
+    }
+
+    .channels,
+    .todos {
+      height: auto; /* 允许内容定义高度 */
+    }
+  }
+
+  @media (max-width: 768px) {
+    .username {
+      font-size: 6vw;
+    }
+
+    .channel-box,
+    .todo-item {
+      font-size: 5vw;
+    }
+
+    .todo-title,
+    .todo-content {
+      font-size: 4vw;
+    }
+  }
+
+  /* 根据需要继续添加更多的媒体查询规则 */
 
   /* 可能需要调整这些值来更好地匹配上传的图片 */
 </style>
