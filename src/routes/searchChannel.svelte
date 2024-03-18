@@ -75,11 +75,32 @@
   async function joinChannel(channelname, channelid) {
     try {
       const userEmail = $currentUserEmail;
+      // 获取当前日期
+      const now = new Date();
+      const year = now.getFullYear();
+      const month = now.getMonth() + 1; // JavaScript的月份是从0开始的
+      const day = now.getDate();
+
+      // 以备选方式获取频道描述
+      const records = await pb
+        .collection("channels")
+        .getFullList({ filter: `channelName="${channelname}"` });
+      if (records.length === 0) {
+        throw new Error("未找到指定的频道。");
+      }
+      const channelDescription = records[0].channelDescription;
+
+      // 创建记录并包含年月日和频道描述
       await pb.collection("users_channels").create({
         useremail: userEmail,
         channelname: channelname,
         originid: channelid,
+        year: year,
+        month: month,
+        day: day,
+        channelDescription: channelDescription, // 存储频道描述
       });
+
       alert("已成功加入频道");
       navigateToChannelDetail("main");
     } catch (error) {
@@ -90,18 +111,6 @@
 
   function updateOriginChannelId(id) {
     originChannelID.set(id);
-    // try {
-    //   const response_ = await pb.collection("channels").getFullList({
-    //     sort: "-created",
-    //     filter: `channelName="${cN}"`,
-    //   });
-    //   // originChannelID.set(response_[0].id);
-    //   // originChannelID.set(response_[0].id);
-    //   const value =response_[0].id;
-    //    window.location.href = `./chantemplate?value=${encodeURIComponent(value)}`;
-    // } catch {
-    //   alert("error");
-    // }
   }
   //导航到指定频道详情页的函数
   function navigateToChannelDetail(channelName) {
