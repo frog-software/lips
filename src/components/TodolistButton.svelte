@@ -8,7 +8,7 @@
   import { currentUserEmail, currentnoticeid, isJoinedTodo } from "../store.js";
 
   let showModal4 = false;
-
+  let showtodo = true;
   function toggleModal4() {
     showModal4 = !showModal4;
   }
@@ -28,7 +28,8 @@
   }
 
   async function jumptodo(title) {
-    const response_ = await pb.collection("notices").getFullList({
+    if(showtodo == true){
+      const response_ = await pb.collection("notices").getFullList({
       sort: "-created",
       filter: `tittle="${title}"`,
     });
@@ -49,10 +50,13 @@
       }
     }
     push("/checknotice");
+    }
+    showtodo = true;
   }
 
   async function deletetodo(todoid) {
     if (!confirm("确定要从待办事项中删除这则通知吗？")) {
+      showtodo = false;
       return;
     }
     try {
