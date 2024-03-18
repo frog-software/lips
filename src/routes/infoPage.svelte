@@ -1,7 +1,12 @@
 <script>
   import PocketBase from "pocketbase";
   import { PocketBase_URL } from "../utils/api/index";
-  import { currentUserEmail, originChannelID, username } from "../store.js";
+  import {
+    currentUserEmail,
+    originChannelID,
+    username,
+    channelName,
+  } from "../store.js";
   import { push } from "svelte-spa-router";
   import { onMount } from "svelte";
   import Navbar from "../components/Navbar.svelte";
@@ -39,9 +44,11 @@
       alert("fail to find");
     }
   }
-  function jumpnew(origin) {
+  function jumpnew(origin, Cname) {
     //currentchannelid.set(id);
     originChannelID.set(origin);
+    channelName.set(Cname);
+    //alert(channelName);
     push("/chantemplate");
   }
 
@@ -59,7 +66,9 @@
       <div class="blockTitle">My channels</div>
       {#if isFind}
         {#each myChannel.slice(0, 5) as mychannel}
-          <button class="channel" on:click={() => jumpnew(mychannel.originid)}
+          <button
+            class="channel"
+            on:click={() => jumpnew(mychannel.originid, mychannel.channelname)}
             >{mychannel.channelname}</button
           >
         {/each}
@@ -70,7 +79,9 @@
     <div class="bottom">
       <div class="blockTitle">Recommended channels</div>
       {#each recChannel.slice(0, 5) as mychannel}
-        <button class="channel" on:click={() => jumpnew(mychannel.id)}
+        <button
+          class="channel"
+          on:click={() => jumpnew(mychannel.id, mychannel.channelName)}
           >{mychannel.channelName}</button
         >
       {/each}
