@@ -131,7 +131,8 @@
     display: flex;
     flex-direction: column;
     width: 30%;
-    height: 100%; /* 左侧部分占据全部高度 */
+    height: 93%; /* 左侧部分占据全部高度 */
+    margin-top: auto;
   }
 
   .right {
