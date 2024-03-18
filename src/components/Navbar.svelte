@@ -4,6 +4,7 @@
   import PocketBase from "pocketbase";
   import { push } from "svelte-spa-router";
   import { PocketBase_URL } from "../utils/api/index";
+  import Searchlan from "../components/searchlan.svelte";
 
   const pb = new PocketBase(PocketBase_URL);
   let isOpen = false;
@@ -145,6 +146,8 @@
   <div class="flex-1">
     <a href="/#/login" class="btn btn-ghost text-xl logo">lips</a>
   </div>
+
+  <!-- <Searchlan  /> -->
 
   <div class="search">
     <input
