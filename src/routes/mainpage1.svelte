@@ -4,7 +4,13 @@
   import { PocketBase_URL } from "../utils/api/index";
   import { onMount } from "svelte";
   import Navbar from "../components/Navbar.svelte";
-  import { currentUserEmail, username } from "../store.js";
+  import {
+    currentUserEmail,
+    currentnoticeid,
+    isJoinedTodo,
+    username,
+    originChannelID,
+  } from "../store.js";
 
   const pb = new PocketBase(PocketBase_URL);
   let channels = []; // 存储频道数据
@@ -47,12 +53,32 @@
     push("/login");
   }
 
-  function navigateToChannelDetail(channelId) {
-    push(`/channel-detail/${channelId}`);
+  function jumpnew(origin) {
+    originChannelID.set(origin);
+    push("/chantemplate");
   }
+  async function jumptodo(title) {
+    const response_ = await pb.collection("notices").getFullList({
+      sort: "-created",
+      filter: `tittle="${title}"`,
+    });
 
-  function navigateToTodoDetail(todoId) {
-    push(`/todo-detail/${todoId}`);
+    currentnoticeid.set(response_[0].id);
+    const uEmail = $currentUserEmail;
+    const response = await pb.collection("todolist").getFullList({
+      sort: "-created",
+      filter: `useremail="${uEmail}"`,
+    });
+
+    for (const item of response) {
+      if (item.tittle == title) {
+        isJoinedTodo.set("find");
+        break;
+      } else {
+        isJoinedTodo.set("noFind");
+      }
+    }
+    push("/checknotice");
   }
 </script>
 
@@ -80,27 +106,27 @@
     <div class="channels h-3/5 overflow-y-auto p-2">
       <h2 class="text-2xl font-semibold mb-4 text-black">Channels</h2>
       <div class="grid grid-cols-2 gap-4">
-        {#each channels as channel}
+        {#each channels.slice(0, 6) as channel}
+          <!-- 限制显示到最多6个频道 -->
           <button
             class="channel-box"
-            on:click={() => navigateToChannelDetail(channel.channelname)}
+            on:click={() => jumpnew(channel.originid)}
           >
             {channel.channelname}
           </button>
         {/each}
       </div>
     </div>
-
-    <!-- 待办事项列表 -->
-    <div class="todos h-2/5 overflow-y-auto p-2 mt-4">
+    <!-- 待办事项列表，显示最多2个 -->
+    <!-- 待办事项列表，显示最多2个 -->
+    <div class="todos h-2/5 p-2 mt-4">
       <h2 class="text-2xl font-semibold mb-4 text-black">Todos</h2>
-      <div class="grid grid-cols-2 gap-4">
-        {#each todos as todo}
-          <button
-            class="todo-box"
-            on:click={() => navigateToTodoDetail(todo.tittle)}
-          >
-            {todo.tittle}
+      <div class="todo-list">
+        {#each todos.slice(0, 2) as todo}
+          <!-- 限制显示到最多2个待办事项 -->
+          <button class="todo-item" on:click={() => jumptodo(todo.tittle)}>
+            <div class="todo-title">{todo.tittle}</div>
+            <div class="todo-content">{todo.body}</div>
           </button>
         {/each}
       </div>
@@ -109,6 +135,17 @@
 </div>
 
 <style>
+  .channels {
+    height: 55%;
+  }
+
+  .todos {
+    height: 45%;
+    overflow: hidden;
+    padding-top: 0;
+  }
+
+  /* 其余样式保持不变 */
   .channel-box {
     border: 1px solid #ccc;
     padding: 8px 16px;
@@ -121,15 +158,31 @@
     color: black; /* 将文字颜色设置为黑色 */
   }
 
-  .todo-box {
-    border: 1px solid #ddd;
-    padding: 8px 16px;
-    margin-bottom: 8px;
-    border-radius: 8px;
-    background-color: #f9f9f9;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-    text-align: center;
-    height: 100px; /* 或者根据内容调整 */
-    color: black; /* 将文字颜色设置为黑色 */
+  .todos {
+    overflow: hidden; /* 禁止滚动 */
   }
+
+  .todo-list {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .todo-item {
+    padding: 16px;
+    border-bottom: 1px solid #ccc; /* Add a bottom border for each todo */
+    margin-bottom: -1px; /* Overlap borders */
+  }
+
+  .todo-title {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 8px; /* Add some space between the title and content */
+  }
+
+  .todo-content {
+    font-size: 16px;
+    color: #333; /* Slightly lighter text for content */
+  }
+
+  /* 可能需要调整这些值来更好地匹配上传的图片 */
 </style>
