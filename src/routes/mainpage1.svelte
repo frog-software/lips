@@ -10,6 +10,7 @@
     isJoinedTodo,
     username,
     originChannelID,
+    channelName,
   } from "../store.js";
 
   const pb = new PocketBase(PocketBase_URL);
@@ -48,12 +49,8 @@
     await fetchTodos();
   });
 
-  function logout() {
-    // 登出逻辑，这里简单地跳转到登录页面
-    push("/login");
-  }
-
-  function jumpnew(origin) {
+  function jumpnew(origin, name) {
+    channelName.set(name);
     originChannelID.set(origin);
     push("/chantemplate");
   }
@@ -80,16 +77,16 @@
     }
     push("/checknotice");
   }
+  let src = "userPicture.jpeg";
 </script>
 
 <Navbar />
 
 <div class="flex h-screen">
   <!-- 左侧用户信息 -->
-  <div class="flex flex-col w-2/5 items-center space-y-10 py-10 user-info">
-    <img src="userPicture.jpeg" alt="User Profile" class="user-picture" />
-    <p class="username">{$username}</p>
-    <button class="btn logout" on:click={logout}>登出</button>
+  <div class="flex flex-col w-2/5 items-center h-dvh space-y-10 py-10">
+    <img {src} alt="user" class="button-img" />
+    <p class="text-7xl text-black">{$username}</p>
   </div>
 
   <!-- 右侧内容区 -->
@@ -102,14 +99,13 @@
           <!-- 限制显示到最多6个频道 -->
           <button
             class="channel-box"
-            on:click={() => jumpnew(channel.originid)}
+            on:click={() => jumpnew(channel.originid, channel.channelname)}
           >
             {channel.channelname}
           </button>
         {/each}
       </div>
     </div>
-
     <!-- 待办事项列表，显示最多2个 -->
     <!-- 待办事项列表，显示最多2个 -->
     <div class="todos h-2/5 p-2 mt-4">
@@ -181,22 +177,6 @@
 
   /* 响应式设计的改进 */
   @media (max-width: 1024px) {
-    .user-info {
-      flex-direction: column;
-      width: 100%;
-      align-items: center;
-      padding-top: 5vh;
-    }
-
-    .user-picture {
-      width: 50vw;
-      height: 50vw; /* 保持图片的纵横比 */
-    }
-
-    .username {
-      font-size: 5vw;
-    }
-
     .content-area {
       width: 100%;
       padding: 2vw;
@@ -220,10 +200,6 @@
   }
 
   @media (max-width: 768px) {
-    .username {
-      font-size: 6vw;
-    }
-
     .channel-box,
     .todo-item {
       font-size: 5vw;
@@ -235,6 +211,12 @@
     }
   }
 
+  .button-img {
+    width: 360px; /* 设置图像的宽度 */
+    height: 360px; /* 设置图像的高度为与宽度相同的值，以确保图像是正方形的 */
+    border-radius: 50%; /* 这将使图像的边角变圆，形成圆形 */
+    object-fit: cover; /* 确保图像在调整大小时保持其宽高比 */
+  }
   /* 根据需要继续添加更多的媒体查询规则 */
 
   /* 可能需要调整这些值来更好地匹配上传的图片 */

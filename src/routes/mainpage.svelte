@@ -24,6 +24,7 @@
   let showModal2 = false;
   let showModal3 = false;
   let showModal4 = false;
+  let showtodo = true;
   let selectedChannel = null;
 
   function editChannel(channelName) {
@@ -41,6 +42,7 @@
   }
   async function deletetodo(todoid) {
     if (!confirm("确定要从待办事项中删除这则通知吗？")) {
+      showtodo = false;
       return;
     }
     try {
@@ -213,27 +215,30 @@
   }
 
   async function jumptodo(title) {
-    const response_ = await pb.collection("notices").getFullList({
-      sort: "-created",
-      filter: `tittle="${title}"`,
-    });
+    if (showtodo == true) {
+      const response_ = await pb.collection("notices").getFullList({
+        sort: "-created",
+        filter: `tittle="${title}"`,
+      });
 
-    currentnoticeid.set(response_[0].id);
-    const uEmail = $currentUserEmail;
-    const response = await pb.collection("todolist").getFullList({
-      sort: "-created",
-      filter: `useremail="${uEmail}"`,
-    });
+      currentnoticeid.set(response_[0].id);
+      const uEmail = $currentUserEmail;
+      const response = await pb.collection("todolist").getFullList({
+        sort: "-created",
+        filter: `useremail="${uEmail}"`,
+      });
 
-    for (const item of response) {
-      if (item.tittle == title) {
-        isJoinedTodo.set("find");
-        break;
-      } else {
-        isJoinedTodo.set("noFind");
+      for (const item of response) {
+        if (item.tittle == title) {
+          isJoinedTodo.set("find");
+          break;
+        } else {
+          isJoinedTodo.set("noFind");
+        }
       }
+      push("/checknotice");
     }
-    push("/checknotice");
+    showtodo = true;
   }
   onMount(() => {
     checkUser();

@@ -4,7 +4,12 @@
   import { onMount } from "svelte";
   import Navbar from "../components/Navbar.svelte";
   import { push } from "svelte-spa-router";
-  import { currentUserEmail, username, originChannelID } from "../store.js";
+  import {
+    currentUserEmail,
+    username,
+    originChannelID,
+    channelName,
+  } from "../store.js";
 
   const pb = new PocketBase(PocketBase_URL);
   let src = "userPicture.jpeg";
@@ -18,7 +23,8 @@
     });
     channels = response_;
   }
-  function jumpnew(origin) {
+  function jumpnew(origin, name) {
+    channelName.set(name);
     originChannelID.set(origin);
     push("/chantemplate");
   }
@@ -36,16 +42,58 @@
 
   <div class="channel-container fixed right-0 top-0 w-3/5">
     {#each channels as channel}
-      <div class="channel bg-transparent border-b border-gray-400">
-        <button class="text-5xl" on:click={() => jumpnew(channel.originid)}
-          >{channel.channelname}</button
+      <div class="channel bg-transparent border-b border-gray-400 p-4">
+        <div
+          class="channel-name text-3xl mb-2"
+          on:click={() => jumpnew(channel.originid, channel.channelname)}
+          role="button"
+          tabindex="0"
+          on:keypress
         >
+          {channel.channelname}
+        </div>
+        <div class="channel-info flex justify-between items-center w-full">
+          <div class="channel-description text-sm">
+            {channel.channelDescription}
+          </div>
+          <div class="channel-date text-sm">
+            {channel.year}年{channel.month}月{channel.day}日加入
+          </div>
+        </div>
       </div>
     {/each}
   </div>
 </body>
 
 <style>
+  .channel-container {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .channel {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start; /* 确保内容靠父容器的左边 */
+  }
+
+  .channel-name {
+    /* 字体最大，您已经在HTML中通过text-5xl设置了 */
+    margin-left: 10px; /* 紧靠父容器左边并保留一定距离 */
+  }
+
+  .channel-description {
+    /* 字体偏中，通过text-xl设置 */
+    margin-top: 2px; /* 与上一行保留一定距离 */
+    margin-left: 10px; /* 紧靠父容器左边并保留一定距离 */
+  }
+
+  .channel-date {
+    /* 字体最小，通过text-sm设置 */
+    margin-top: 4px; /* 与上一行保留一定距离 */
+    margin-left: 10px; /* 紧靠父容器左边并保留一定距离 */
+  }
+
   .button-img {
     width: 360px; /* 设置图像的宽度 */
     height: 360px; /* 设置图像的高度为与宽度相同的值，以确保图像是正方形的 */
