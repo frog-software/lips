@@ -98,17 +98,17 @@
         on:click={() => check(record.id, record.tittle)}
         on:keypress
       >
+        <button class="chacha" on:click={() => deletenotice(record.id)}
+          >x</button
+        >
         <div class="title">{record.tittle}</div>
         <div class="content">#{record.tag}</div>
         <div class="author">from:{record.username}</div>
-      </div>
-      <div>
-        <button class="edit-btn" on:click={() => editnotice(record.id)}
-          >修改</button
-        >
-        <button class="delete-btn" on:click={() => deletenotice(record.id)}
-          >删除</button
-        >
+        <div>
+          <button class="edit-btn" on:click={() => editnotice(record.id)}
+            >修改</button
+          >
+        </div>
       </div>
     {/each}
   </div>
@@ -147,25 +147,30 @@
     color: #666;
   }
 
-  .edit-btn,
-  .delete-btn {
-    margin-left: 0.5rem;
-    padding: 0.3rem 0.6rem;
-    font-size: 0.8rem;
-    background-color: #4e4e4e; /* 按钮的背景颜色 */
+  .edit-btn {
+    background-color: #ffc107;
     color: white;
-    border: none;
-    border-radius: 2px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
   }
 
   .edit-btn:hover {
-    background-color: #5c5c5c; /* 修改按钮悬停时的背景颜色 */
+    background-color: #e0a800;
   }
 
-  .delete-btn:hover {
+  .chacha {
+    background-color: white;
+    width: 20px;
+    color: #a3a1a1;
+    float: right;
+    text-align: center;
+  }
+  .edit-btn {
+    background-color: #ffc107;
     color: white;
-    background-color: #a54444; /* 删除按钮悬停时的背景颜色 */
+    padding: 0.5rem 1rem; /* Adjusted for consistency */
+    font-size: 14px; /* Adjusted for consistency */
+    border-radius: 5px; /* Consistent with other elements */
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin-top: 10px; /* Added space above the button */
   }
 </style>
