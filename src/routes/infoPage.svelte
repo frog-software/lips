@@ -100,7 +100,7 @@
 
 <style>
   .genshin {
-    background-image: url("public/Rpp.png"); /* 设置背景*/
+    background-image: url("/public/new.png"); /* 设置背景*/
     background-position: center; /* 水平和垂直居中背景图 */
     background-size: cover; /* 或者使用contain根据具体需求 */
   }
@@ -127,7 +127,7 @@
     width: 70%;
     height: 100%; /* 右侧部分占据剩余宽度和全部高度 */
     background-color: #f0f0f0; /* 为右侧部分添加背景色以区分 */
-    background-image: url("public/Rpp.png"); /* 设置背景*/
+    background-image: url("/public/new.png"); /* 设置背景*/
     overflow-y: auto; /* 允许垂直方向上的滚动 */
     background-position: center; /* 水平和垂直居中背景图 */
     margin-left: 3%; /* 居中显示 */
@@ -158,6 +158,7 @@
     color: #000000;
     font-size: 40px;
     margin-top: 35px;
+    font-weight: bolder;
   }
 
   .articleBody {
@@ -166,8 +167,9 @@
   p {
     white-space: pre-wrap; /* 允许文本换行并保留空白处，包括空格和换行符 */
     font-family: "heiti";
+    font-weight: bolder;
     font-weight: 900;
-    font-size: 25px;
+    font-size: 30px;
     text-align: justify;
     margin-top: 50px;
     line-height: 200%;
